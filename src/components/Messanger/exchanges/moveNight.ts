@@ -1,11 +1,22 @@
+import moment from 'moment';
+
 import donnieDarko from 'assets/images/avatars/donnie-darko.jpg';
-const defaultGradiant = ['#363636', '#2e2e2e', '#242323'];
 const zolaGradient = ['#fc03d3', '#752368', '#000000'];
 const chrisGradiant = ['pink', '#2e2e2e', '#242323'];
+const aliceGradient = ['#d23b24', '#ff8800', '#ffc900'];
 
-import moment from 'moment';
+// NB For some insane fucking reason it cannot find alice.jpg.
+// No idea why this is.
+
 import zola from 'assets/images/avatars/zola.jpg';
 import chris from 'assets/images/avatars/chris.jpg';
+import aliceAvatar from 'assets/images/avatars/alice_avator.jpg';
+
+import {makeExchangeFunction} from './utility';
+
+const zolaExchange = makeExchangeFunction('Zola', zola, zolaGradient);
+const chrisExchange = makeExchangeFunction('Chris', chris, chrisGradiant);
+const aliceExchange = makeExchangeFunction('Alice', aliceAvatar, aliceGradient);
 
 export const movieNight = {
   name: '🎥 🌌',
@@ -14,92 +25,109 @@ export const movieNight = {
   exchanges: [
     {
       timeStamp: moment()
+        .subtract(6, 'months')
+        .set('hour', 20)
+        .set('minute', 0),
+    },
+    aliceExchange([`Can't make it this time.`]),
+    {
+      exchange: [`I wish you could.`],
+    },
+    aliceExchange([`I know.`]),
+    zolaExchange([
+      `I miss you girl. You at least have time for a wine hang soonish?`,
+    ]),
+    aliceExchange([`Hopefully. Everything has me feeling a bit ground down.`]),
+    chrisExchange([`O, the new Ben Whetly movie is streaming.`]),
+    zolaExchange([`In the Earth, looks a bit like an ecological cult movie.`]),
+    {
+      exchange: [
+        `There's only seven actors on IMDB. It was shot at the hight of the Pandemic. I really doubt they could do a good cult movie`,
+      ],
+    },
+    chrisExchange([`You don't need that many people for a cult. `]),
+    {
+      timeStamp: moment()
+        .subtract(5, 'months')
+        .set('hour', 20)
+        .set('minute', 0),
+    },
+    {
+      exchange: [`I need something old school.`],
+    },
+    aliceExchange([`Can't make it this time.`]),
+    zolaExchange([`I can't either`]),
+    chrisExchange([`I'm still in.`]),
+    {
+      exchange: [`Going to be just the two of us then.`],
+    },
+    chrisExchange([`Good, only you could deal with Beyond the Black Rainbow.`]),
+    {
+      exchange: [`...Maybe`],
+    },
+    {
+      timeStamp: moment()
         .subtract(4, 'months')
         .set('hour', 20)
         .set('minute', 27),
     },
+    zolaExchange([`It's time toooo movie night!`]),
+    chrisExchange([
+      `Is this where we draw a smily face on or hands and do a group huddle before we are sent to the shadow zone.`,
+    ]),
+    zolaExchange([`It's a symbol of friendship.`]),
     {
-      name: 'Zola',
-      exchange: [
-        `We need to do another movie night. I'm clawing the walls just for some type of stimulation.`,
-      ],
-      avatar: zola,
-      color: zolaGradient,
+      exchange: [`Weeb`],
     },
-    {
-      name: 'Chris',
-      exchange: [`Sounds like a normal Saturday night for you.`],
-      avatar: chris,
-      color: chrisGradiant,
-    },
-    {
-      name: 'Zola',
-      exchange: [
-        `No, normally I have more 🍷. And witty repitore to keep me amused`,
-      ],
-      avatar: zola,
-      color: zolaGradient,
-    },
+    zolaExchange([`Seriously, I'm bored and climbing the walls.`]),
+
+    chrisExchange([`Sounds like a normal Saturday night for you.`]),
+    zolaExchange([
+      `No, normally I have more 🍷. And witty repitore to keep me amused`,
+    ]),
+
     {
       exchange: [
         `Sorry, work has kept me busy gurl.`,
         `That and setting up the new office.`,
       ],
     },
-    {
-      name: 'Zola',
-      exchange: [
-        `You need to send photos of that soon. I'm pretty sure you haven't event started to decorate it properly.`,
-      ],
-      avatar: zola,
-      color: zolaGradient,
-    },
+    zolaExchange([
+      `You need to send photos of that soon. I'm pretty sure you haven't event started to decorate it properly.`,
+    ]),
     {
       exchange: [`At least it's cable managed.`],
     },
+    chrisExchange([`I want to see a new horror film.`]),
+
+    zolaExchange([
+      `It's always horror with you. We've done six of them in a row.`,
+    ]),
+    chrisExchange([`We have not!`]),
+    zolaExchange([
+      `In the Earth.`,
+      `A Field in England.`,
+      `Susperia Both Versions`,
+      `A Dark Song`,
+    ]),
+    chrisExchange([`I count only five.`]),
+    zolaExchange([`The Tenet`]),
+    chrisExchange([`Point`]),
+    aliceExchange([`I actually might be able to join this time.`]),
+    chrisExchange([`Clair letting you out for the night?`]),
+    aliceExchange([`She ain't my keeper`]),
+    chrisExchange([
+      `Is that why you've only made it twice in the last six months`,
+    ]),
+    aliceExchange([`I've been busy`]),
+    chrisExchange([`With Clair.`]),
     {
-      name: 'Chris',
-      exchange: [`I want to see a new horror film.`],
-      avatar: chris,
-      color: chrisGradiant,
+      exchange: [`Chris lay the fuck off.`],
     },
+    chrisExchange([`I'm just saying the obvious. 💁‍♀️`]),
     {
-      name: 'Zola',
-      exchange: [
-        `It's always horror with you. We've done six of them in a row.`,
-      ],
-      avatar: zola,
-      color: defaultGradiant,
+      exchange: [`Why did I ever show you that emoji.`],
     },
-    {
-      name: 'Chris',
-      exchange: [`We have not.`],
-      avatar: chris,
-      color: chrisGradiant,
-    },
-    {
-      name: 'Zola',
-      exchange: [
-        `In the Earth.`,
-        `A Field in England.`,
-        `Mullholland Drive`,
-        `Susperia Both Versions`,
-        `A Dark Song`,
-      ],
-      avatar: zola,
-      color: zolaGradient,
-    },
-    {
-      name: 'Chris',
-      exchange: [`I only count five.`],
-      avatar: chris,
-      color: chrisGradiant,
-    },
-    {
-      name: 'Zola',
-      exchange: [`The Tenet`],
-      avatar: zola,
-      color: zolaGradient,
-    },
+    zolaExchange([`Zoolander?`]),
   ],
 };

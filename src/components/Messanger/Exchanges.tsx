@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import Sound from 'react-native-sound';
 
 import {
@@ -25,6 +25,7 @@ import DisplayDateTime from './DisplayDateTime';
 import {Moment} from 'moment';
 
 import theme from 'themes';
+import {ApplicationContext} from 'contexts/app';
 
 type DateTimeType = {
   timeStamp: Moment;
@@ -45,7 +46,7 @@ const Exchanges: FC<{
 }> = ({exchanges}) => {
   const [asset, setAsset] = useState(undefined);
   const [playedAudio, setPlayedAudio] = useState<number[]>([]);
-  const [soundCleanup, setSoundCleanup] = useState<Sound>();
+  const context = useContext(ApplicationContext);
 
   const renderItem: ListRenderItem<ExchangeItemType> = ({item, index}) => {
     if (isDateTime(item)) {
@@ -78,14 +79,7 @@ const Exchanges: FC<{
   };
 
   useEffect(() => {
-    Sound.setCategory('Playback');
-
-    return () => {
-      if (soundPlayer.current != null) {
-        soundPlayer.current.stop();
-        soundPlayer.current.release();
-      }
-    };
+    return () => context.audio.set(undefined);
   }, []);
 
   const playAudio = (audio: any) => {
@@ -96,23 +90,7 @@ const Exchanges: FC<{
       state.push(audio);
       return state;
     });
-    const whoosh = new Sound(audio, error => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-
-      soundPlayer.current = whoosh;
-
-      // Play the sound with an onEnd callback
-      whoosh.play(success => {
-        if (success) {
-          console.log('successfully finished playing');
-        } else {
-          console.log('playback failed due to audio decoding errors');
-        }
-      });
-    });
+    context.audio.set({uri: audio});
   };
 
   const onViewRef = React.useRef(viewableItems => {
@@ -151,7 +129,7 @@ const Exchanges: FC<{
             padding: theme.spacing.p1,
             paddingBottom: 0,
           }}
-          initialNumToRender={15}
+          initialNumToRender={25}
           onViewableItemsChanged={onViewRef.current}
           data={exchanges}
           renderItem={renderItem}

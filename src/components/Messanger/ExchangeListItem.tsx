@@ -39,7 +39,7 @@ const ExchangeListItem: FC<Props> = ({
         setMessageId(index);
       }}>
       <Row>
-        <ImageBackground
+        <Image
           source={avatarSprite}
           style={[
             {
@@ -51,9 +51,8 @@ const ExchangeListItem: FC<Props> = ({
             },
             avatarStyles,
           ]}
-          imageStyle={{resizeMode: 'contain'}}
         />
-        <View>
+        <View style={{flex: 1}}>
           <Bold>{name}</Bold>
           <P>{message}</P>
         </View>

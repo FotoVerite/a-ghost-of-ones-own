@@ -1,27 +1,20 @@
 import React, {FC, useEffect, useState} from 'react';
 import {
-  Alert,
   BackHandler,
   FlatList,
-  Image,
-  ImageProps,
-  ImageSourcePropType,
-  Keyboard,
   ListRenderItem,
   NativeEventSubscription,
-  ScrollView,
   View,
 } from 'react-native';
-import {RouteProp, useIsFocused, useRoute} from '@react-navigation/native';
+import Fuse from 'fuse.js';
+
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {Layout, Row} from 'components/Grid';
 
-import Exchange from './Exchange';
-import avatars from './avatars/psn-avatars.jpeg';
 import ExchangeListItem from './ExchangeListItem';
 import theme from 'themes';
 import Animated, {
   FadeIn,
-  FadeOut,
   interpolate,
   useAnimatedStyle,
   useDerivedValue,
@@ -30,11 +23,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {screenParams} from 'components/Navigation/screens';
-import Exchanges, {ExchangeItemType} from './Exchanges';
+import Exchanges from './Exchanges';
 import {Bold, P} from 'components/StyledText';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {BlurView} from '@react-native-community/blur';
-import Fuse from 'fuse.js';
 
 import {zola} from './exchanges/zola';
 import {grindrReset} from './exchanges/grindrReset';
@@ -42,6 +34,10 @@ import seemlessOrders from './exchanges/seemless';
 import {fedex} from './exchanges/fedex';
 import {Moment} from 'moment';
 import {movieNight} from './exchanges/moveNight';
+import {chris} from './exchanges/chris';
+import {chineseSpam} from './exchanges/chineseSpam';
+import {alice} from './exchanges/alice';
+import {dennis} from './exchanges/dennis';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Messages'>;
@@ -65,11 +61,20 @@ function isExchangeType(x: any): x is MessageExchangeType {
   return x.hasOwnProperty('exchange');
 }
 
-const test = [zola, grindrReset, seemlessOrders, fedex, movieNight];
+const test = [
+  zola,
+  grindrReset,
+  seemlessOrders,
+  fedex,
+  movieNight,
+  chris,
+  dennis,
+  chineseSpam,
+  alice,
+];
 const Messenger: FC<Props> = ({navigation}) => {
   const showingMessage = useSharedValue(0);
   const route = useRoute<RouteProp<screenParams, 'Messages'>>();
-  const [query, setQuery] = useState('');
   const [messages, setMessages] = useState(test);
 
   const [messageId, setMessageId] = useState<number | undefined>(
@@ -134,20 +139,38 @@ const Messenger: FC<Props> = ({navigation}) => {
     const filteredExchanges = item.exchanges.filter(
       exchange => isExchangeType(exchange) && exchange.avatar != null,
     );
+    const truncate = (
+      str: string,
+      length: number = 100,
+      ending: string = '...',
+    ) => {
+      if (str.length > length) {
+        return str.substring(0, length - ending.length) + ending;
+      } else {
+        return str;
+      }
+    };
 
     return (
-      <ExchangeListItem
-        avatarSprite={item.avatar}
-        index={index}
-        name={item.name}
-        message={
-          item.listDisplayText ||
-          filteredExchanges.reverse()[0].exchange.reverse()[0] ||
-          '...'
-        }
-        avatarStyles={{}}
-        setMessageId={setMessageId}
-      />
+      <>
+        <ExchangeListItem
+          avatarSprite={item.avatar}
+          index={index}
+          name={item.name}
+          message={
+            item.listDisplayText ||
+            truncate(
+              filteredExchanges.reverse()[0].exchange.reverse()[0],
+              50,
+              '...',
+            ) ||
+            '...'
+          }
+          avatarStyles={{}}
+          setMessageId={setMessageId}
+        />
+        {index === test.length - 1 && <View style={{height: 25}}></View>}
+      </>
     );
   };
 

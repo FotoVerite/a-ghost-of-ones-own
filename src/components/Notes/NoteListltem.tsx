@@ -1,13 +1,6 @@
 import {Bold} from 'components/StyledText';
 import React, {FC} from 'react';
-import {
-  ColorValue,
-  Image,
-  Touchable,
-  TouchableHighlight,
-  View,
-} from 'react-native';
-import styled from 'styled-components/native';
+import {TouchableHighlight} from 'react-native';
 import {NoteProps} from './Note';
 
 type Props = {

@@ -110,6 +110,33 @@ export const P = styled(Text)<{
     font-family: WorkSansRegular;
 `;
 
+export const NoteText = styled(Text)<{
+  size?: fontSize;
+  p?: spacing;
+  pt?: spacing;
+  pr?: spacing;
+  pb?: spacing;
+  pl?: spacing;
+  ph?: spacing;
+  pv?: spacing;
+}>`
+  color: #fff;
+  font-size: ${props => `${convertSymboltoFontSize(props.size || 'm')}px`};
+  margin: 2px 0;
+  ${({p}) => p && `padding: ${theme.spacing[p]}px;`}
+  ${({pt}) => pt && `padding-top: ${theme.spacing[pt]}px;`}
+  ${({pr}) => pr && `padding-right: ${theme.spacing[pr]}px;`}
+  ${({pb}) => pb && `padding-bottom: ${theme.spacing[pb]}px;`}
+  ${({pl}) => pl && `padding-left: ${theme.spacing[pl]}px;`}
+  ${({ph}) =>
+    ph &&
+    `padding-top: ${theme.spacing[ph]}px; padding-bottom: ${theme.spacing[ph]}px;`}
+  ${({pv}) =>
+    pv &&
+    `padding-left: ${theme.spacing[pv]}px; padding-right: ${theme.spacing[pv]}px;`}
+    font-family: monospace;
+`;
+
 export const Highlight = styled(View)<{
   borderRadius?: 'small' | 'normal';
   outline?: boolean;

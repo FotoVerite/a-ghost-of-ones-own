@@ -29,6 +29,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import Timers from 'components/Timers';
 import Navigation from 'components/Navigation';
+import {enableScreens} from 'react-native-screens';
 
 const Section: React.FC<{
   title: string;
@@ -58,6 +59,7 @@ const Section: React.FC<{
   );
 };
 
+enableScreens();
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 

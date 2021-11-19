@@ -1,15 +1,11 @@
-import {Bold, P} from 'components/StyledText';
 import React, {FC} from 'react';
-import {ColorValue, Image, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import Animated, {
   Layout,
-  LightSpeedInLeft,
-  LightSpeedInRight,
-  LightSpeedOutRight,
   SlideInRight,
   SlideOutRight,
 } from 'react-native-reanimated';
-import styled from 'styled-components/native';
+import theme from 'themes';
 
 export type NoteProps = {
   note: Element;
@@ -23,14 +19,24 @@ const Note: FC<NoteProps> = ({note, title}) => {
       exiting={SlideOutRight}
       layout={Layout.springify()}
       style={{
-        zIndex: 2,
-        backgroundColor: 'red',
+        backgroundColor: 'black',
         width: '100%',
         height: '100%',
         position: 'absolute',
+        paddingVertical: theme.spacing.p1,
+        paddingHorizontal: theme.spacing.p2,
         marginTop: 50,
       }}>
-      {note}
+      <ScrollView
+        style={{
+          flex: 1,
+          flexGrow: 1,
+          padding: 0,
+          margin: 0,
+          marginBottom: 50,
+        }}>
+        {note}
+      </ScrollView>
     </Animated.View>
   );
 };

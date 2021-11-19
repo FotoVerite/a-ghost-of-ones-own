@@ -207,8 +207,8 @@ const TextBubble: FC<Props> = ({
         fontSize: 13,
         width: width.state,
         textShadowColor: runOnLayout ? undefined : 'red',
-        textShadowOffset: {width: 2, height: 5},
-        textShadowRadius: 5,
+        textShadowOffset: runOnLayout ? undefined : {width: 2, height: 5},
+        textShadowRadius: runOnLayout ? undefined : 5,
       }}>
       {message}
     </P>
@@ -221,7 +221,7 @@ const TextBubble: FC<Props> = ({
         source={message.image}
         style={{
           width: '98%',
-          aspectRatio: 1,
+          aspectRatio: message.aspect || 1,
           height: undefined,
           marginVertical: theme.spacing.p1,
           borderRadius: theme.BorderRadius.small,
