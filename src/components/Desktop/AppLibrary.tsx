@@ -14,6 +14,7 @@ import {screenParams} from 'components/Navigation/screens';
 import {Bold} from 'components/StyledText';
 
 import theme from 'themes';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -55,6 +56,66 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
         />
       ),
       name: 'notes',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'All Citizens Bank'}
+          icon={
+            <Icon
+              name="bank"
+              size={40}
+              style={{
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          }
+          navigateTo={'Bank'}
+          navigation={navigation}
+        />
+      ),
+      name: 'AcB',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Phone'}
+          icon={
+            <Icon
+              name="phone"
+              size={40}
+              style={{
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          }
+          navigateTo={'Phone'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Phone',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Swiper'}
+          icon={
+            <Icon
+              name="phone"
+              size={40}
+              style={{
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          }
+          navigateTo={'LiquidSwiper'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Swiper',
     },
   ];
   const [apps, setApps] = useState(applications);

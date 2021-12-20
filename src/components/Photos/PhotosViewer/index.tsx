@@ -11,7 +11,7 @@ import {
   Image,
   PanResponder,
 } from 'react-native';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {NavigationProp, RouteProp, useRoute} from '@react-navigation/native';
 import {Layout, Row} from 'components/Grid';
 
 import Animated, {
@@ -31,7 +31,7 @@ import {Moment} from 'moment';
 import {albums} from '../AlbumView';
 
 type Props = {
-  navigation: any;
+  navigation: NavigationProp<'PhotosViewer'>;
   route: RouteProp<Record<string, object | undefined>, 'PhotosViewer'>;
 };
 
@@ -80,20 +80,22 @@ const Photos: FC<Props> = ({route, navigation}) => {
     };
   });
 
+
   useEffect(() => {
-    let unsubscribe: NativeEventSubscription;
-    unsubscribe = BackHandler.addEventListener('hardwareBackPress', () => {
+    let unsubscribe: any;
+    unsubscribe = navigation.addListener('beforeRemove', (e) => {
       navigation.setParams({
         id: photo,
       });
       return false;
+      
     });
 
     //NB: It might make sense to seperate this logic once estimate is complete.
     //NB I don't love any of the complexity
     return () => {
       if (unsubscribe != null) {
-        unsubscribe.remove();
+        unsubscribe()
       }
     };
   }, [photo, route]);
@@ -172,6 +174,10 @@ const Photos: FC<Props> = ({route, navigation}) => {
     );
   };
 
+  const getItemLayout = (data, index) => {
+    return { length: width, offset: width * index, index };
+  }
+
   return (
     <Layout style={{backgroundColor: 'black', flex: 1}}>
       <StatusBar hidden />
@@ -181,6 +187,7 @@ const Photos: FC<Props> = ({route, navigation}) => {
         pagingEnabled
         bounces={false}
         onViewableItemsChanged={onViewRef.current}
+        getItemLayout={getItemLayout}
         data={albums[routeParams.params.album_id].photos}
         renderItem={renderItem}
         renderToHardwareTextureAndroid

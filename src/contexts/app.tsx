@@ -2,9 +2,23 @@
 
 import React, {FC, useEffect, useState} from 'react';
 import moment, {Moment} from 'moment';
-import {Dimensions} from 'react-native';
 import Sound from 'react-native-sound';
-import {P} from 'components/StyledText';
+import Notification from 'components/Notification';
+
+export enum TriggerState {
+  NOT_TRIGGERED = 1,
+  TRIGGERED,
+  FINISHED,
+}
+
+export type EventType = {
+  type: 'notification' | 'other';
+  notification: Element;
+  triggered: TriggerState;
+};
+
+export type EventHash = {[index: string]: EventType};
+export type EventMap = Map<string, EventType>;
 
 export type ApplicationContextTypeDigest = {};
 export type ApplicationContextTypeDigested = {
@@ -17,11 +31,37 @@ export type ApplicationContextTypeDigested = {
     set: React.Dispatch<React.SetStateAction<undefined | Element>>;
     state: undefined | Element;
   };
+  events: {
+    state: EventMap;
+    set: (name: string, state: TriggerState) => void;
+  };
+  player?: Sound;
 };
 export type SoundObjetType = {
   uri: string;
   volume?: number;
+  autoplay?: boolean;
+  duration?: number;
 };
+
+const appEvents: EventMap = new Map([
+  [
+    'bankCode',
+    {
+      type: 'notification',
+      notification: (
+        <Notification
+          iconName={'message-alert-outline'}
+          delay={0}
+          title={'2033'}
+          body={`Your reset code from Citizen's Bank is 744423`}
+        />
+      ),
+      triggered: TriggerState.NOT_TRIGGERED,
+    },
+  ],
+]);
+
 //defaults for empty app
 export const ApplicationContext =
   React.createContext<ApplicationContextTypeDigested>({});
@@ -33,6 +73,17 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
   );
 
   const [notification, setNotification] = React.useState<Element>();
+  const [events, setEvents] = React.useState<EventMap>(appEvents);
+
+  const setEventTo = (name: string, state: TriggerState) => {
+    setEvents(events => {
+      const newState = new Map(events);
+      const eventState = newState.get(name);
+      const newEventState = Object.assign({}, eventState, {triggered: state});
+      newState.set(name, newEventState);
+      return newState;
+    });
+  };
 
   useEffect(() => {
     Sound.setCategory('Playback');
@@ -46,7 +97,16 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
   }, []);
 
   useEffect(() => {
-    if (soundObject != null) {
+    events.forEach((value, key) => {
+      if (value.triggered === TriggerState.TRIGGERED) {
+        setNotification(value.notification);
+        setEventTo(key, TriggerState.FINISHED);
+      }
+    });
+  }, [events]);
+
+  useEffect(() => {
+    if (soundObject != null && soundObject.autoplay) {
       soundPlayer?.play(success => {
         if (success) {
         } else {
@@ -67,15 +127,21 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
       if (error) {
         return;
       }
-
+      setSoundObject(obj =>
+        Object.assign({}, obj, {duration: whoosh.getDuration()}),
+      );
       setSoundPlayer(whoosh);
       // Play the sound with an onEnd callback
     });
-  }, [soundObject]);
+  }, [soundObject?.uri]);
 
   return (
     <ApplicationContext.Provider
       value={{
+        events: {
+          state: events,
+          set: setEventTo,
+        },
         startedSession: moment(),
         notification: {
           state: notification,
@@ -85,6 +151,7 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
           set: setSoundObject,
           state: soundObject,
         },
+        player: soundPlayer,
       }}>
       {props.children}
     </ApplicationContext.Provider>

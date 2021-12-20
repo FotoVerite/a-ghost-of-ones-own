@@ -38,6 +38,7 @@ import {chris} from './exchanges/chris';
 import {chineseSpam} from './exchanges/chineseSpam';
 import {alice} from './exchanges/alice';
 import {dennis} from './exchanges/dennis';
+import {matthew} from './exchanges/matthew';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Messages'>;
@@ -71,6 +72,7 @@ const test = [
   dennis,
   chineseSpam,
   alice,
+  matthew,
 ];
 const Messenger: FC<Props> = ({navigation}) => {
   const showingMessage = useSharedValue(0);
@@ -194,7 +196,7 @@ const Messenger: FC<Props> = ({navigation}) => {
     </Animated.View>
   );
   return (
-    <Layout>
+    <Layout style={{backgroundColor: 'white'}}>
       <TextInput
         style={{
           marginTop: 55,

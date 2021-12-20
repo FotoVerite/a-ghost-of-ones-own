@@ -1,4 +1,3 @@
-import {Shadow} from 'react-native-neomorph-shadows';
 
 import React, {FC} from 'react';
 import {
@@ -81,24 +80,11 @@ const Album: FC<AlbumProps> = ({
         onPress={() => {
           navigation.push('Album', {id: index});
         }}>
-        <Shadow
-          inner // <- enable inner shadow
-          style={{
-            shadowOffset: {width: 5, height: 5},
-            shadowOpacity: 1,
-            shadowColor: 'grey',
-            shadowRadius: 10,
-            borderRadius: 24,
-            backgroundColor: undefined,
-            width: ITEM_SIZE * 0.81,
-            height: ITEM_SIZE * 0.805,
-            // ...include most of View/Layout styles
-          }}>
+       
           <Image
             source={image}
             style={[{aspectRatio: 1, height: undefined, zIndex: 3}, imageStyle]}
           />
-        </Shadow>
         <P style={{color: 'black', textAlign: 'center'}}>{title}</P>
       </TouchableWithoutFeedback>
     </Animated.View>

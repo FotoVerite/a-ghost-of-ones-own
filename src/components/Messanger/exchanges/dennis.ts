@@ -17,7 +17,7 @@ export const dennis = {
   avatar: dennisAvatar,
   exchanges: [
     {
-      timeStamp: moment('4-20-2020'),
+      timeStamp: moment('20200420T133000'),
     },
     {
       exchange: [`Happy Birthday Dude, been a while.`],
@@ -76,7 +76,7 @@ export const dennis = {
     },
     dennisExchange([`Def not the only slut here anymore.`]),
     {
-      timeStamp: moment('5-22-2020T20:09:21'),
+      timeStamp: moment('20200420T170910'),
     },
     {
       exchange: [`How goes the Van Life?`],

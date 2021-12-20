@@ -14,7 +14,6 @@ import {RouteProp} from '@react-navigation/native';
 import {Layout} from 'components/Grid';
 
 import NoteListItem from './NoteListltem';
-import {Bold, P} from 'components/StyledText';
 import Note, {NoteProps} from './Note';
 
 import theme from 'themes';
@@ -26,6 +25,8 @@ import {record_posts} from './notes/record_posts';
 import {lastNight} from './notes/lastNight';
 import {whatScaresMe} from './notes/whatScaresMe';
 import {gardening} from './notes/gardening';
+import {theCeiling} from './notes/theCeiling';
+import {hallway} from './notes/hallway';
 
 type Props = {
   navigation: any;
@@ -84,6 +85,8 @@ const Notes: FC<Props> = ({route, navigation}) => {
           InTheBackOfTheirHead,
           whatScaresMe,
           gardening,
+          theCeiling,
+          hallway,
         ]}
         renderItem={renderItem}
         keyExtractor={(item: any, index) => index + ''}

@@ -1,27 +1,7 @@
-import {P} from 'components/StyledText';
 import React, {FC} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageProps,
-  ImageStyle,
-  Platform,
-  ScrollView,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Dimensions, FlatList, Platform, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Animated, {
-  Extrapolate,
-  interpolate,
-  Layout,
-  SharedValue,
-  SlideInRight,
-  SlideOutRight,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-import theme from 'themes';
+import {SharedValue} from 'react-native-reanimated';
 import Backdrop from './Backdrop';
 
 export type BackdropRendererProps = {

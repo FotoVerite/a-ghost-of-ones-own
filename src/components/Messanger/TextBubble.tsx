@@ -223,6 +223,7 @@ const TextBubble: FC<Props> = ({
           width: '98%',
           aspectRatio: message.aspect || 1,
           height: undefined,
+          width: message.width,
           marginVertical: theme.spacing.p1,
           borderRadius: theme.BorderRadius.small,
         }}

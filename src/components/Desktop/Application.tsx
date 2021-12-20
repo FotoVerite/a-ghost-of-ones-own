@@ -10,7 +10,8 @@ import theme from 'themes';
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
   navigateTo: AppRoutes;
-  image: any;
+  image?: any;
+  icon?: any;
   title: string;
 };
 
@@ -18,19 +19,18 @@ export const Application: FC<Props> = ({
   navigation,
   navigateTo,
   image,
+  icon,
   title,
 }) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
-      <View style={{width: 50, height: 75}}>
+      <View style={{width: 75, height: 85}}>
         <Image
           source={image}
-          width={50}
-          height={50}
           resizeMethod={'scale'}
-          style={{width: 50, height: 50}}
+          style={{width: 60, height: 60, alignSelf: 'center'}}
         />
-        <P size="s" style={{textAlign: 'center', fontSize: 9}}>
+        <P size="s" style={{textAlign: 'center'}}>
           {title}
         </P>
       </View>
@@ -42,18 +42,32 @@ export const ApplicationLineItem: FC<Props> = ({
   navigation,
   navigateTo,
   image,
+  icon,
   title,
 }) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
       <Row style={{width: undefined, height: 75}}>
-        <Image
-          source={image}
-          width={50}
-          height={50}
-          resizeMethod={'scale'}
-          style={{width: 50, height: 50}}
-        />
+        {image && (
+          <Image
+            source={image}
+            width={50}
+            height={50}
+            resizeMethod={'scale'}
+            style={{width: 50, height: 50}}
+          />
+        )}
+        {icon != undefined && (
+          <View
+            style={{
+              width: 75,
+              height: 75,
+              backgroundColor: 'white',
+              justifyContent: 'center',
+            }}>
+            {icon}
+          </View>
+        )}
         <P
           size="m"
           style={{

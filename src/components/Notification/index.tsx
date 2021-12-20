@@ -1,12 +1,11 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Bold, P} from 'components/StyledText';
 
 import theme from 'themes';
 import Animated, {
-  LightSpeedInLeft,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -22,9 +21,10 @@ type Props = {
   title: string;
   body: string;
   iconName?: string;
+  delay?: number;
 };
 
-const Notification: FC<Props> = ({iconName, title, body}) => {
+const Notification: FC<Props> = ({delay, iconName, title, body}) => {
   // Sound.setCategory('Playback');
 
   // var whoosh = new Sound(dings, error => {
@@ -79,13 +79,14 @@ const Notification: FC<Props> = ({iconName, title, body}) => {
     onEnd: (event, ctx) => {},
   });
 
+  const {width, height} = Dimensions.get('window');
+
   return (
     <Animated.View
-      entering={LightSpeedInLeft}
       style={[
         {
           margin: theme.spacing.p2,
-          width: '75%',
+          width: width * 0.8,
           backgroundColor: theme.colors.better,
           alignSelf: 'center',
           padding: theme.spacing.p1 + 2,
@@ -99,14 +100,27 @@ const Notification: FC<Props> = ({iconName, title, body}) => {
         onHandlerStateChange={() => setPressed(pressed => pressed + 1)}>
         <Row>
           {iconName && (
-            <Icon
-              name={iconName}
-              size={theme.spacing.p2}
-              color={'#FD4234'}
-              style={{alignSelf: 'center', marginRight: theme.spacing.p1}}
-            />
+            <View
+              style={{
+                width: 45,
+                height: 45,
+                backgroundColor: 'white',
+                borderRadius: 5,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                marginRight: theme.spacing.p1,
+              }}>
+              <Icon
+                name={iconName}
+                size={theme.spacing.p2}
+                color={'#FD4234'}
+                style={{
+                  alignSelf: 'center',
+                }}
+              />
+            </View>
           )}
-          <View>
+          <View style={{width: width * 0.8 - 85}}>
             <Bold>{title}</Bold>
             <P>{body}</P>
           </View>

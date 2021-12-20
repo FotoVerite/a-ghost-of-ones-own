@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {View, Text} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 
 import theme, {spacing} from 'themes';
 
@@ -44,7 +44,7 @@ export const Bold = styled(Text)<{
   color: #000;
   font-weight: bold;
   font-size: ${props => `${convertSymboltoFontSize(props.size)}px`};
-  font-family: SourceSansProBold;
+  font-family: ${ Platform.OS === 'ios' ? 'Menlo' : 'SourceSansProBold'};
   ${({p}) => p && `padding: ${theme.spacing[p]}px;`}
   ${({pt}) => pt && `padding-top: ${theme.spacing[pt]}px;`}
   ${({pr}) => pr && `padding-right: ${theme.spacing[pr]}px;`}
@@ -107,7 +107,8 @@ export const P = styled(Text)<{
   ${({pv}) =>
     pv &&
     `padding-left: ${theme.spacing[pv]}px; padding-right: ${theme.spacing[pv]}px;`}
-    font-family: WorkSansRegular;
+    font-family: ${ Platform.OS === 'ios' ? ' Helvetica Neue' : 'WorkSansRegular'};
+    font-weight: 500;
 `;
 
 export const NoteText = styled(Text)<{
@@ -134,7 +135,7 @@ export const NoteText = styled(Text)<{
   ${({pv}) =>
     pv &&
     `padding-left: ${theme.spacing[pv]}px; padding-right: ${theme.spacing[pv]}px;`}
-    font-family: monospace;
+    font-family: ${ Platform.OS === 'ios' ? 'Menlo' : 'monospace'};;
 `;
 
 export const Highlight = styled(View)<{
