@@ -1,18 +1,13 @@
 import {Bold} from 'components/StyledText';
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {TouchableHighlight} from 'react-native';
-import {NoteProps} from './Note';
+import {NoteContext, NoteProps} from './context/NoteContext';
 
-type Props = {
-  note: Element;
-  title: string;
-  setter: React.Dispatch<React.SetStateAction<NoteProps | undefined>>;
-};
-
-const NoteListItem: FC<Props> = ({note, setter, title}) => {
+const NoteListItem: FC<NoteProps> = note => {
+  const context = useContext(NoteContext);
   return (
-    <TouchableHighlight onPress={() => setter({title: title, note: note})}>
-      <Bold style={{color: 'gray'}}>{title}</Bold>
+    <TouchableHighlight onPress={() => context.note.set(note)}>
+      <Bold style={{color: 'gray'}}>{note.title}</Bold>
     </TouchableHighlight>
   );
 };

@@ -1,16 +1,17 @@
 import React, {FC, useContext, useEffect} from 'react';
 import {NativeEventSubscription, BackHandler} from 'react-native';
-import {NoteContext} from './context/NoteContext';
+import {MessengerContext} from './context/MessengerContext';
 
 const BackButton: FC = () => {
-  const context = useContext(NoteContext);
+  const context = useContext(MessengerContext);
 
-  const {folder, noteState, note} = context;
+  const {messengerState} = context;
+
   useEffect(() => {
     let unsubscribe: NativeEventSubscription;
-    if (noteState.state != 0) {
+    if (messengerState.state != 0) {
       unsubscribe = BackHandler.addEventListener('hardwareBackPress', () => {
-        noteState.set(s => (s -= 1));
+        messengerState.set(v => v - 1);
         return true;
       });
     }
@@ -21,7 +22,7 @@ const BackButton: FC = () => {
         unsubscribe.remove();
       }
     };
-  }, [noteState.state]);
+  }, [messengerState.state]);
   return <></>;
 };
 

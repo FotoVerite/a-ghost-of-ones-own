@@ -116,7 +116,7 @@ const Desktop: FC<Props> = props => {
             <Application
               image={photos}
               title={'Photos'}
-              navigateTo={'Photos'}
+              navigateTo={'PhotosApp'}
               navigation={props.navigation}
             />
             <Application

@@ -30,6 +30,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Timers from 'components/Timers';
 import Navigation from 'components/Navigation';
 import {enableScreens} from 'react-native-screens';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const Section: React.FC<{
   title: string;
@@ -70,11 +71,7 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <ApplicationContextProvider>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-          }}>
+        <SafeAreaProvider>
           <Timers />
           <ApplicationContextConsumer>
             {({notification}) => notification.state}
@@ -82,7 +79,7 @@ const App = () => {
 
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
           <Navigation />
-        </SafeAreaView>
+        </SafeAreaProvider>
       </ApplicationContextProvider>
     </GestureHandlerRootView>
   );

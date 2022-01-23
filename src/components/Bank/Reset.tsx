@@ -1,17 +1,23 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {
+  FC,
+  MutableRefObject,
+  Ref,
+  RefObject,
+  useRef,
+  useState,
+} from 'react';
 
 // Library Imports
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
 import {useForm, Controller} from 'react-hook-form';
-import {Dimensions, Pressable, View} from 'react-native';
+import {Dimensions, Pressable, TextInput, View} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 // Components
 import {Bold, ErrorText, NoteText} from 'components/StyledText';
 
 import theme from 'themes';
 import {Row} from 'components/Grid';
-import {numericLiteral} from '@babel/types';
 
 type Inputs = {
   input1: string;
@@ -44,17 +50,65 @@ const InputContainer = styled(View)`
   padding: 0;
 `;
 
+const TokenInput: FC<{
+  refs: any;
+  name: 'input1' | 'input2' | 'input3' | 'input4' | 'input5' | 'input6';
+  index: number;
+  control: any;
+}> = ({name, index, refs, control}) => {
+  const dimensions = Dimensions.get('window');
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={{required: true}}
+      render={({field: {onChange, onBlur, value}}) => (
+        <Input
+          defaultValue={''}
+          ref={refs[index - 1]}
+          keyboardType={'numeric'}
+          autoCompleteType={'none'}
+          onSubmitEditing={() => {
+            if (index !== 6) refs[index].current!.focus();
+          }}
+          containerStyle={{
+            margin: 0,
+            padding: 0,
+            width: (dimensions.width * 0.8 - theme.spacing.p5) / 6,
+          }}
+          maxLength={1}
+          inputContainerStyle={{
+            borderBottomWidth: 0,
+            backgroundColor: theme.colors.lightGray2,
+            borderRadius: theme.BorderRadius.small,
+            borderColor: 'black',
+            width: (dimensions.width * 0.8 - (theme.spacing.p5 + 36)) / 6,
+          }}
+          textAlign={'center'}
+          blurOnSubmit={false}
+          returnKeyType="next"
+          value={value}
+          onChangeText={value => {
+            onChange(value);
+            if (index !== 6) refs[index].current!.focus();
+          }}
+        />
+      )}
+    />
+  );
+};
+
 const Reset: FC = ({}) => {
   const dimensions = Dimensions.get('window');
 
   const {
     control,
+    getValues,
     formState: {errors, isValid},
     handleSubmit,
   } = useForm<Inputs>({
     mode: 'onChange',
   });
-
   const [loginErrorMessage, setLoginErrorMessage] = useState<boolean | string>(
     false,
   );
@@ -64,46 +118,25 @@ const Reset: FC = ({}) => {
 
   const [divHight, setDivHight] = useState(0);
 
-  const onSubmit = () => {
-    setLoginErrorMessage(true);
-    setServerError(false);
-  };
+  const ref1 = useRef<TextInput>(null);
+  const ref2 = useRef<TextInput>(null);
+  const ref3 = useRef<TextInput>(null);
+  const ref4 = useRef<TextInput>(null);
+  const ref5 = useRef<TextInput>(null);
+  const ref6 = useRef<TextInput>(null);
+  const refs = [ref1, ref2, ref3, ref4, ref5, ref6];
 
-  const TokenInput: FC<{name: string}> = ({name}) => {
-    return (
-      <Controller
-        control={control}
-        name={name}
-        rules={{required: true}}
-        defaultValue={''}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            keyboardType={'numeric'}
-            autoCompleteType={'none'}
-            onBlur={onBlur}
-            containerStyle={{
-              margin: 0,
-              padding: 0,
-              width: (dimensions.width * 0.8 - theme.spacing.p5) / 6,
-            }}
-            maxLength={1}
-            inputContainerStyle={{
-              borderBottomWidth: 0,
-              backgroundColor: theme.colors.lightGray2,
-              borderRadius: theme.BorderRadius.small,
-              borderColor: 'black',
-              width: (dimensions.width * 0.8 - (theme.spacing.p5 + 36)) / 6,
-            }}
-            textAlign={'center'}
-            blurOnSubmit={false}
-            returnKeyType="next"
-            onChangeText={onChange}
-            value={value}
-            onSubmitEditing={() => {}}
-          />
-        )}
-      />
-    );
+  const onSubmit = (data: Inputs) => {
+    let string = '';
+    for (const [key, value] of Object.entries(data)) {
+      string += value;
+    }
+    if (string === '744423') {
+      setLoginErrorMessage(false);
+    } else {
+      setLoginErrorMessage(true);
+    }
+    setServerError(false);
   };
 
   return (
@@ -141,18 +174,48 @@ const Reset: FC = ({}) => {
           </Bold>
           <ErrorText>
             {loginErrorMessage === true
-              ? 'Bad Username or Password'
+              ? 'Validation Code does not match.'
               : loginErrorMessage}
             {serverError && `Server Unreachable`}
           </ErrorText>
 
           <InputContainer>
-            <TokenInput name={'input1'} />
-            <TokenInput name={'input2'} />
-            <TokenInput name={'input3'} />
-            <TokenInput name={'input4'} />
-            <TokenInput name={'input5'} />
-            <TokenInput name={'input6'} />
+            <TokenInput
+              name={'input1'}
+              index={1}
+              control={control}
+              refs={refs}
+            />
+            <TokenInput
+              name={'input2'}
+              index={2}
+              control={control}
+              refs={refs}
+            />
+            <TokenInput
+              name={'input3'}
+              index={3}
+              control={control}
+              refs={refs}
+            />
+            <TokenInput
+              name={'input4'}
+              index={4}
+              control={control}
+              refs={refs}
+            />
+            <TokenInput
+              name={'input5'}
+              index={5}
+              control={control}
+              refs={refs}
+            />
+            <TokenInput
+              name={'input6'}
+              index={6}
+              control={control}
+              refs={refs}
+            />
           </InputContainer>
           <Row>
             <NoteText size={'s'} style={{marginBottom: theme.spacing.p2}}>

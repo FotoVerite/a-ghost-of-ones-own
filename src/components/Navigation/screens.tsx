@@ -38,31 +38,9 @@ export const SCREENS = {
     title: 'Notes',
     component: Notes,
   },
-  Photos: {
+  PhotosApp: {
     title: 'Photos',
     component: Photos,
-  },
-  PhotosViewer: {
-    title: '',
-    component: PhotosViewer,
-    transitionSpec: {
-      open: {animation: 'timing', config: {duration: 200}},
-      close: {animation: 'timing', config: {duration: 200}},
-    },
-    shared: (route, otherRoute, showing) => {
-      const {id} = route.params;
-      return [
-        {
-          id: `photo.${id}`,
-          resize: 'clip',
-          // align: ''left-top'
-        },
-      ];
-    },
-  },
-  Album: {
-    title: 'Album',
-    component: AlbumView,
   },
   Scruff: {
     title: '',
@@ -87,8 +65,7 @@ export type screenParams = {
     id?: number;
   };
   Notes: {id?: string};
-  Photos: {id?: string};
-  PhotosViewer: {album: AlbumType; id: number};
+  PhotosApp: undefined;
   ScratchPad: undefined;
   Scruff: undefined;
 };

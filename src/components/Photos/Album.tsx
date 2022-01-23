@@ -1,5 +1,4 @@
-
-import React, {FC} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -27,28 +26,21 @@ import {ITEM_SIZE_RATIO} from '.';
 
 import theme from 'themes';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {AlbumProps, PhotoContext} from './context';
+import {useNavigation, useNavigationState} from '@react-navigation/native';
 
-export type AlbumProps = {
-  navigation: any;
-  image: any;
+export type Props = {
+  album: AlbumProps;
   index: number;
-  title: string;
-  setter: any;
   viewStyle: ViewStyle;
   imageStyle: ImageStyle;
   scrollX: SharedValue<number>;
 };
 
-const Album: FC<AlbumProps> = ({
-  image,
-  index,
-  title,
-  imageStyle,
-  navigation,
-  scrollX,
-  viewStyle,
-}) => {
+const Album: FC<Props> = ({album, index, imageStyle, scrollX, viewStyle}) => {
   const {width, height} = Dimensions.get('window');
+  const navigation = useNavigation();
+  const context = useContext(PhotoContext);
 
   const ITEM_SIZE = width * ITEM_SIZE_RATIO;
 
@@ -78,14 +70,14 @@ const Album: FC<AlbumProps> = ({
       <TouchableWithoutFeedback
         style={{}}
         onPress={() => {
-          navigation.push('Album', {id: index});
+          context.album.set(album);
+          navigation.navigate('Album', {id: index});
         }}>
-       
-          <Image
-            source={image}
-            style={[{aspectRatio: 1, height: undefined, zIndex: 3}, imageStyle]}
-          />
-        <P style={{color: 'black', textAlign: 'center'}}>{title}</P>
+        <Image
+          source={album.coverPhoto}
+          style={[{aspectRatio: 1, height: undefined, zIndex: 3}, imageStyle]}
+        />
+        <P style={{color: 'black', textAlign: 'center'}}>{album.title}</P>
       </TouchableWithoutFeedback>
     </Animated.View>
   );

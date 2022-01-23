@@ -33,7 +33,7 @@ const Backdrop: FC<AlbumProps> = ({item, index, scrollX}) => {
   const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.5;
   const BACKDROP_HEIGHT = height * 0.65;
 
-  if (!item.image) {
+  if (!item.coverPhoto) {
     return null;
   }
 
@@ -60,7 +60,7 @@ const Backdrop: FC<AlbumProps> = ({item, index, scrollX}) => {
         animatedStyle,
       ]}>
       <Image
-        source={item.image}
+        source={item.coverPhoto}
         style={{
           width: width,
           height: BACKDROP_HEIGHT,

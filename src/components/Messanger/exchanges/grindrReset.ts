@@ -9,14 +9,17 @@ export const grindrReset = {
   exchanges: [
     {
       timeStamp: moment()
-        .subtract(3, 'months')
-        .set('hour', 14)
-        .set('minute', 25),
-    },
-    {
-      exchange: ['Your Grindr reset code is 547243.'],
+        .subtract(5, 'months')
+        .set('hour', 15)
+        .set('minute', 2),
       avatar: unkownAvatar,
       color: defaultGradiant,
+      messages: [
+        {
+          type: 'text',
+          content: 'Your Grindr reset code is 547243.',
+        },
+      ],
     },
   ],
 };
