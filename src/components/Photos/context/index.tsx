@@ -9,6 +9,7 @@ import records1 from 'components/Notes/notes/images/records/records1.jpeg';
 import bmr from 'components/Notes/notes/images/records/bmr.jpeg';
 import coil from 'components/Notes/notes/images/records/coil.jpeg';
 import {recent} from '../albums/recent';
+import {SharedValue, useSharedValue} from 'react-native-reanimated';
 
 export type AlbumProps = {
   title: string;
@@ -25,6 +26,10 @@ export type PhotoProps = {
 export type PhotoContextTypeDigest = {};
 
 export type PhotoContextTypeDigested = {
+  sharedValues: {
+    showInfo: SharedValue<number>;
+    showHeader: SharedValue<number>;
+  };
   album: {
     set: React.Dispatch<React.SetStateAction<AlbumProps | undefined>>;
     state: AlbumProps | undefined;
@@ -53,6 +58,8 @@ const PhotoContextProvider: FC<PhotoContextTypeDigest> = props => {
 
   const [viewablePhotos, setViewablePhotos] = React.useState<PhotoProps[]>();
   const [photoState, setPhotoState] = React.useState<number>(0);
+  const showInfo = useSharedValue(0);
+  const showHeader = useSharedValue(0);
 
   const album1 = {
     title: 'One',
@@ -91,6 +98,10 @@ const PhotoContextProvider: FC<PhotoContextTypeDigest> = props => {
         PhotoState: {
           state: photoState,
           set: setPhotoState,
+        },
+        sharedValues: {
+          showInfo: showInfo,
+          showHeader: showHeader,
         },
         album: {
           set: setAlbum,

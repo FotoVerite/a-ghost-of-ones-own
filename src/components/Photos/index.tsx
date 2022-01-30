@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StatusBar} from 'react-native';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {Layout} from 'components/Grid';
 
@@ -18,8 +18,8 @@ export const ALBUM_PHOTO_SIZE_RATIO = 0.8;
 const Photos: FC<Props> = ({route, navigation}) => {
   return (
     <PhotoContextProvider>
+      <StatusBar hidden />
       <Layout style={{backgroundColor: 'black', flex: 1}}>
-        <StatusBar hidden />
         <Navigation />
       </Layout>
     </PhotoContextProvider>

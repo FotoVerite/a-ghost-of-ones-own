@@ -1,108 +1,44 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useContext, useLayoutEffect, useState} from 'react';
 import {
-  BackHandler,
   Dimensions,
   FlatList,
   ListRenderItem,
-  NativeEventSubscription,
-  Platform,
   StatusBar,
   View,
-  Image,
-  PanResponder,
 } from 'react-native';
 import {NavigationProp, RouteProp, useRoute} from '@react-navigation/native';
-import {Layout, Row} from 'components/Grid';
+import {Layout} from 'components/Grid';
 
-import Animated, {
-  interpolate,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
 import theme from 'themes';
-import {screenParams} from 'components/Navigation/screens';
-import {SharedElement} from 'react-navigation-shared-element';
-import {NoteText, P} from 'components/StyledText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Moment} from 'moment';
-import {albums} from '../AlbumView';
+import {screenParams} from '../Navigation/screens';
+import PhotoListItem from './PhotoListItem';
+import {PhotoContext, PhotoProps} from '../context';
+import {State, TapGestureHandler} from 'react-native-gesture-handler';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   navigation: NavigationProp<'PhotosViewer'>;
   route: RouteProp<Record<string, object | undefined>, 'PhotosViewer'>;
 };
 
-export type PhotoType = {
-  source: string;
-  notes?: string;
-  date: Moment;
-  title?: string;
-};
-export type AlbumType = {
-  title: string;
-  photos: PhotoType[];
-};
 const Photos: FC<Props> = ({route, navigation}) => {
-  const routeParams = useRoute<RouteProp<screenParams, 'PhotosViewer'>>();
-  const showInfo = useSharedValue(0);
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-
-      onPanResponderMove: (e, state) => {
-        if (state.dy < -100 && state.vy < 0) {
-          showInfo.value = 1;
-        } else if (state.dy > 100) {
-          showInfo.value = 0;
-        }
-      },
-      onPanResponderRelease: () => {},
-    }),
-  ).current;
-  const {width, height} = Dimensions.get('window');
-
-  const [photo, setPhoto] = useState<undefined | any>(undefined);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      marginTop: withSpring(interpolate(showInfo.value, [1, 0], [-200, 0])),
-    };
-  });
-
-  const notesAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      height: withTiming(
-        interpolate(showInfo.value, [1, 0], [height * 0.33, 0]),
-      ),
-    };
-  });
-
-
-  useEffect(() => {
-    let unsubscribe: any;
-    unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      navigation.setParams({
-        id: photo,
-      });
-      return false;
-      
-    });
-
-    //NB: It might make sense to seperate this logic once estimate is complete.
-    //NB I don't love any of the complexity
-    return () => {
-      if (unsubscribe != null) {
-        unsubscribe()
-      }
-    };
-  }, [photo, route]);
+  const routeParams = useRoute<RouteProp<screenParams, 'Photos'>>();
+  const context = useContext(PhotoContext);
+  const showHeader = context.sharedValues.showHeader;
+  const [photoIndex, setPhotoIndex] = useState(routeParams.params.id);
+  const insets = useSafeAreaInsets();
 
   const onViewRef = React.useRef(viewableItems => {
     onViewableItemsChanged(viewableItems);
     // Use viewable items in state or as intended
+  });
+
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(context.sharedValues.showHeader.value),
+    };
   });
 
   const onViewableItemsChanged = ({
@@ -111,91 +47,83 @@ const Photos: FC<Props> = ({route, navigation}) => {
   }: {
     viewableItems: ViewToken[];
   }) => {
-    setPhoto(viewableItems[0].index);
+    navigation.setParams({id: viewableItems[0].index});
+    setPhotoIndex(viewableItems[0].index);
   };
+  const {width, height} = Dimensions.get('window');
 
-  const renderItem: ListRenderItem<PhotoType> = ({item, index}) => {
-    return (
-      <View
-        {...panResponder.panHandlers}
-        style={[
-          {
-            width: width,
-            height: height,
-            justifyContent: 'center',
-          },
-        ]}>
-        <Animated.View style={[{}, animatedStyle]}>
-          <SharedElement id={`photo.${index}`}>
-            <Image
-              source={item.source}
-              resizeMode={'contain'}
-              style={{width: width}}></Image>
-          </SharedElement>
-        </Animated.View>
-        <Animated.View
-          style={[
-            {
-              paddingVertical: theme.spacing.p2,
-              width: width,
-              bottom: 0,
-              position: 'absolute',
-              borderTopStartRadius: theme.BorderRadius.normal,
-              borderTopEndRadius: theme.BorderRadius.normal,
-              backgroundColor: 'black',
-            },
-            notesAnimatedStyle,
-          ]}>
-          <P
-            size={'m'}
-            style={{
-              paddingHorizontal: theme.spacing.p2,
-              color: 'white',
-              marginBottom: theme.spacing.p2,
-            }}>
-            {item.notes}
-          </P>
-          <View
-            style={{
-              backgroundColor: '#282A25',
-              flexGrow: 1,
-              padding: theme.spacing.p1,
-            }}>
-            <NoteText size={'s'}>{item.date}</NoteText>
-            <Row style={{marginTop: theme.spacing.p1}}>
-              <Icon name={'image-filter-drama'} color={'white'} size={24} />
-              <NoteText style={{marginStart: theme.spacing.p2}}>
-                {item.title}
-              </NoteText>
-            </Row>
-          </View>
-        </Animated.View>
-      </View>
-    );
+  const renderItem: ListRenderItem<PhotoProps> = ({item, index}) => {
+    return <PhotoListItem photo={item} index={index} />;
   };
 
   const getItemLayout = (data, index) => {
-    return { length: width, offset: width * index, index };
-  }
+    return {length: width, offset: width * index, index};
+  };
+
+  useLayoutEffect(() => {
+    showHeader.value = 0;
+  }, []);
 
   return (
     <Layout style={{backgroundColor: 'black', flex: 1}}>
-      <StatusBar hidden />
-
-      <FlatList
-        horizontal
-        pagingEnabled
-        bounces={false}
-        onViewableItemsChanged={onViewRef.current}
-        getItemLayout={getItemLayout}
-        data={albums[routeParams.params.album_id].photos}
-        renderItem={renderItem}
-        renderToHardwareTextureAndroid
-        contentContainerStyle={{alignItems: 'center'}}
-        keyExtractor={(item: any, index) => index + ''}
-        initialScrollIndex={routeParams.params.id}
-        initialNumToRender={1}
-      />
+      <StatusBar hidden={false} barStyle={'light-content'} />
+      <TapGestureHandler
+        maxDelayMs={1000}
+        onHandlerStateChange={e => {
+          if (
+            e.nativeEvent.absoluteY < 100 &&
+            context.sharedValues.showHeader.value === 1
+          ) {
+          } else if (e.nativeEvent.state === State.END) {
+            context.sharedValues.showHeader.value === 1
+              ? (context.sharedValues.showHeader.value = 0)
+              : (context.sharedValues.showHeader.value = 1);
+          }
+        }}>
+        <View>
+          <Animated.View
+            style={[
+              {
+                justifyContent: 'center',
+                backgroundColor: '#212121',
+                width: '100%',
+                paddingTop: insets.top,
+                paddingBottom: theme.spacing.p1,
+              },
+              headerStyle,
+            ]}>
+            <TapGestureHandler
+              onHandlerStateChange={() => {
+                if (showHeader.value === 1) {
+                  navigation.navigate('Album');
+                }
+              }}>
+              <View style={{width: 40}}>
+                <Icon
+                  name="chevron-left"
+                  size={40}
+                  color={'#1588ba'}
+                  style={[{}]}
+                />
+              </View>
+            </TapGestureHandler>
+          </Animated.View>
+          <FlatList
+            horizontal
+            pagingEnabled
+            bounces={false}
+            onViewableItemsChanged={onViewRef.current}
+            getItemLayout={getItemLayout}
+            data={context.album.state?.photos}
+            renderItem={renderItem}
+            renderToHardwareTextureAndroid
+            contentContainerStyle={{alignItems: 'center'}}
+            keyExtractor={(item: any, index) => index + ''}
+            initialScrollIndex={photoIndex}
+            initialNumToRender={2}
+          />
+        </View>
+      </TapGestureHandler>
     </Layout>
   );
 };

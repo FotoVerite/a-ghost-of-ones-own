@@ -3,16 +3,17 @@ import {FlatList, ListRenderItem, View, Image, Dimensions} from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
 import theme from 'themes';
-import {screenParams} from 'components/Navigation/screens';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {SharedElement} from 'react-navigation-shared-element';
 import {PhotoContext, PhotoProps} from '../context';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {screenParams} from '../Navigation/screens';
 
 type Props = {photo: PhotoProps; index: number};
 
 const PhotoListItem: FC<Props> = ({photo, index}) => {
   const context = useContext(PhotoContext);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<screenParams>>();
   const {width, height} = Dimensions.get('window');
 
   return (
