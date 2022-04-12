@@ -40,7 +40,6 @@ const PhotoListItem: FC<Props> = ({photo, index}) => {
     <PanGestureHandler
       activeOffsetY={[-20, 20]}
       onGestureEvent={e => {
-        console.log(e.nativeEvent);
         if (e.nativeEvent.translationY < 0) {
           showInfo.value = 1;
         } else {

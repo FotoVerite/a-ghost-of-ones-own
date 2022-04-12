@@ -2,7 +2,7 @@ import React, {FC, useRef, useState} from 'react';
 import {ApplicationLineItem} from './Application';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {FlatList, ListRenderItem, PanResponder, View} from 'react-native';
+import {FlatList, ListRenderItem, View} from 'react-native';
 
 import {BlurView} from '@react-native-community/blur';
 import Animated, {SlideInRight, SlideOutRight} from 'react-native-reanimated';
@@ -15,6 +15,8 @@ import {Bold} from 'components/StyledText';
 
 import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {PanGestureHandler} from 'react-native-gesture-handler';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -22,18 +24,8 @@ type Props = {
 };
 
 const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+  const insets = useSafeAreaInsets();
 
-      onPanResponderMove: (e, state) => {
-        if (state.dx > 200) {
-          setVisible(false);
-        }
-      },
-      onPanResponderRelease: () => {},
-    }),
-  ).current;
   const applications = [
     {
       component: (
@@ -72,6 +64,26 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
             />
           }
           navigateTo={'Bank'}
+          navigation={navigation}
+        />
+      ),
+      name: 'AcB',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Secrets'}
+          icon={
+            <Icon
+              name="bank"
+              size={40}
+              style={{
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          }
+          navigateTo={'Gamepad'}
           navigation={navigation}
         />
       ),
@@ -134,61 +146,66 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
           zIndex: 2,
           position: 'absolute',
           width: '100%',
-          top: 0,
+          top: insets.top,
         },
-      ]}
-      {...panResponder.panHandlers}>
-      <>
-        <BlurView
-          style={{
-            zIndex: 3,
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-          blurType="light"
-          blurAmount={30}
-          reducedTransparencyFallbackColor="white"
-        />
-        <View style={{zIndex: 3}}>
-          <FuseSearch
-            elements={applications}
-            setSearchableElements={setApps}
-            title={'Application Library'}
-            keys={['name']}
-          />
-          <FlatList
+      ]}>
+      <PanGestureHandler
+        activeOffsetX={[-50, 50]}
+        onGestureEvent={e => {
+          setVisible(false);
+        }}>
+        <View style={{zIndex: 3, flexGrow: 1}}>
+          <BlurView
             style={{
-              padding: theme.spacing.p1,
+              zIndex: 3,
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
             }}
-            data={apps}
-            renderItem={renderItem}
-            keyExtractor={(item: any, index) => index + ''}
-            ListEmptyComponent={
-              <View
-                style={{
-                  alignContent: 'center',
-                  justifyContent: 'center',
-                  height: '100%',
-                  backgroundColor: 'none',
-                }}>
-                <Bold>No Apps Found</Bold>
-              </View>
-            }
-            ItemSeparatorComponent={props => {
-              return (
+            blurType="light"
+            blurAmount={30}
+            reducedTransparencyFallbackColor="white"
+          />
+          <View style={{zIndex: 3, flex: 1}}>
+            <FuseSearch
+              elements={applications}
+              setSearchableElements={setApps}
+              title={'Application Library'}
+              keys={['name']}
+            />
+            <FlatList
+              style={{
+                padding: theme.spacing.p1,
+              }}
+              data={apps}
+              renderItem={renderItem}
+              keyExtractor={(item: any, index) => index + ''}
+              ListEmptyComponent={
                 <View
                   style={{
-                    height: 2,
-                    marginVertical: 10,
-                    backgroundColor: 'white',
-                  }}
-                />
-              );
-            }}
-          />
+                    alignContent: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    backgroundColor: 'none',
+                  }}>
+                  <Bold>No Apps Found</Bold>
+                </View>
+              }
+              ItemSeparatorComponent={props => {
+                return (
+                  <View
+                    style={{
+                      height: 2,
+                      marginVertical: 10,
+                      backgroundColor: 'white',
+                    }}
+                  />
+                );
+              }}
+            />
+          </View>
         </View>
-      </>
+      </PanGestureHandler>
     </Animated.View>
   );
 };

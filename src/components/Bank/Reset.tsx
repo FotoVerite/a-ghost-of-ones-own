@@ -98,7 +98,7 @@ const TokenInput: FC<{
   );
 };
 
-const Reset: FC = ({}) => {
+const Reset: FC<{navigation: any}> = ({navigation}) => {
   const dimensions = Dimensions.get('window');
 
   const {
@@ -133,6 +133,7 @@ const Reset: FC = ({}) => {
     }
     if (string === '744423') {
       setLoginErrorMessage(false);
+      navigation.navigate('Questions');
     } else {
       setLoginErrorMessage(true);
     }

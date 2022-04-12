@@ -4,100 +4,116 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Bold, P} from 'components/StyledText';
 
-import theme from 'themes';
-import Animated, {
+import {
   useAnimatedGestureHandler,
-  useAnimatedStyle,
   useSharedValue,
-  withRepeat,
-  withSequence,
-  withTiming,
 } from 'react-native-reanimated';
-import {TapGestureHandler} from 'react-native-gesture-handler';
+import {
+  TapGestureHandler,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import {Row} from 'components/Grid';
 import {ApplicationContext} from 'contexts/app';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {AnimatePresence, MotiView, useDynamicAnimation} from 'moti';
+import theme from 'themes';
 
-type Props = {
+export type NotificationProps = {
   title: string;
   body: string;
   iconName?: string;
   delay?: number;
+  index: number;
+  keyId: string;
 };
 
-const Notification: FC<Props> = ({delay, iconName, title, body}) => {
-  // Sound.setCategory('Playback');
+export type NotificationTriggerProps = {
+  title: string;
+  body: string;
+  iconName?: string;
+  key: string;
+};
 
-  // var whoosh = new Sound(dings, error => {
-  //   if (error) {
-  //     console.log('failed to load the sound', error);
-  //     return;
-  //   }
-
-  //   // Play the sound with an onEnd callback
-  //   whoosh.play(success => {
-  //     if (success) {
-  //       console.log('successfully finished playing');
-  //     } else {
-  //       console.log('playback failed due to audio decoding errors');
-  //     }
-  //   });
-  // });
+const Notification: FC<NotificationProps> = ({
+  delay,
+  iconName,
+  title,
+  body,
+  index,
+  keyId,
+}) => {
+  const {width, height} = Dimensions.get('window');
+  const insets = useSafeAreaInsets();
+  const [visible, setVisible] = useState(true);
   const rotation = useSharedValue(0);
+  const xValue = useSharedValue(width);
+  const skewValue = useSharedValue(35);
+
   const [pressed, setPressed] = useState(0);
-  const [remove, setRemove] = useState(0);
 
   const context = useContext(ApplicationContext);
-  useEffect(() => {
-    if (pressed > 0) {
-      rotation.value = withSequence(
-        withTiming(-10, {duration: 50}),
-        withRepeat(withTiming(5, {duration: 100}), 6, true),
-        withTiming(0, {duration: 50}),
-      );
-      setRemove(1);
-    }
-    return () => {};
-  }, [pressed]);
-
-  useEffect(() => {
-    if (remove) {
-      context.notification.set(undefined);
-    }
-    return () => {};
-  }, [remove]);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{rotateZ: `${rotation.value}deg`}],
-    };
-  });
 
   const eventHandler = useAnimatedGestureHandler({
-    onStart: (event, ctx) => {
-      setPressed(pressed => pressed++);
-    },
+    onStart: (event, ctx) => {},
     onEnd: (event, ctx) => {},
   });
 
-  const {width, height} = Dimensions.get('window');
+  const remove = () => {
+    context.notifications.set(notifications => {
+      const newMap = new Map(notifications);
+      newMap.delete(keyId);
+      return newMap;
+    });
+  };
+
+  const marginTop = useDynamicAnimation(() => {
+    return {
+      marginTop: insets.top + theme.spacing.p1 + 80 * index,
+    };
+  });
+
+  useEffect(() => {
+    marginTop.animateTo({
+      marginTop: insets.top + theme.spacing.p1 + 80 * index,
+    });
+    return () => {};
+  }, [index]);
 
   return (
-    <Animated.View
+    <MotiView
+      state={marginTop}
       style={[
         {
-          margin: theme.spacing.p2,
+          height: 75,
+          marginTop: insets.top + theme.spacing.p1,
           width: width * 0.8,
           backgroundColor: theme.colors.better,
           alignSelf: 'center',
           padding: theme.spacing.p1 + 2,
           borderRadius: theme.BorderRadius.normal,
           position: 'absolute',
-          zIndex: 5,
+          zIndex: 5 + index,
         },
-        animatedStyle,
-      ]}>
-      <TapGestureHandler
-        onHandlerStateChange={() => setPressed(pressed => pressed + 1)}>
+      ]}
+      from={{
+        scale: 0.8,
+        skewX: '45deg',
+        translateX: -width,
+        opacity: 1,
+      }}
+      animate={{
+        scale: 1,
+        skewX: '0deg',
+        translateX: 0,
+        opacity: 1,
+      }}
+      onDidAnimate={(key, finished, value, dic) => {
+        if (key === 'opacity' && finished && dic.attemptedValue == 0) {
+        }
+      }}
+      exit={{scale: 1, skewX: '0deg', translateX: 0, opacity: 0}}>
+      <TouchableWithoutFeedback onPress={() => remove()}>
         <Row>
           {iconName && (
             <View
@@ -125,8 +141,8 @@ const Notification: FC<Props> = ({delay, iconName, title, body}) => {
             <P>{body}</P>
           </View>
         </Row>
-      </TapGestureHandler>
-    </Animated.View>
+      </TouchableWithoutFeedback>
+    </MotiView>
   );
 };
 

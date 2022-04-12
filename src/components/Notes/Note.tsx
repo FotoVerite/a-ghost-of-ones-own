@@ -1,5 +1,5 @@
-import React, {FC, useContext, useEffect} from 'react';
-import {Dimensions, FlatList, ListRenderItem, View} from 'react-native';
+import React, {FC, useContext} from 'react';
+import {Dimensions, FlatList} from 'react-native';
 
 import theme from 'themes';
 import {NoteContext} from './context/NoteContext';

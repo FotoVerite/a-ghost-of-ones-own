@@ -22,7 +22,12 @@ const ResetPressable: FC<{navigation: any}> = ({navigation}) => {
     <Pressable
       onTouchStart={() => setColor('pink')}
       onTouchEnd={() => {
-        context.events.set('bankCode', TriggerState.TRIGGERED);
+        context.notifications.add({
+          iconName: 'alert',
+          title: 'Your 1 time passcode',
+          body: '744423',
+          key: 'bank-passcode',
+        });
         navigation.navigate('Bank', {screen: 'Reset'});
       }}>
       <NoteText

@@ -36,8 +36,6 @@ const Hallway: FC<Props> = () => {
   const [position, setPosition] = useState(null);
 
   const onLayout = useCallback(event => {
-    console.log('ads');
-    console.log(event.nativeEvent.layout);
     const {width, height} = event.nativeEvent.layout;
   }, []);
 

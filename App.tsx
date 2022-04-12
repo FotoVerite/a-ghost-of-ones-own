@@ -8,81 +8,74 @@
  * @format
  */
 
-import {Layout} from 'components/Grid';
-import Notification from 'components/Notification';
 import ApplicationContextProvider, {
   ApplicationContextConsumer,
 } from 'contexts/app';
-import React from 'react';
-import {
-  ImageBackground,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {LogBox, StatusBar, StyleSheet, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-import Timers from 'components/Timers';
 import Navigation from 'components/Navigation';
 import {enableScreens} from 'react-native-screens';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import actOneFlags from 'assets/triggers/act_1_flags';
+import actOneTriggers from 'assets/triggers/act_1_triggers';
+import NotificationContainer from 'components/Notification/NotificationContainer';
+import 'react-native-reanimated';
+import Subtitles from 'components/utility/Subtitle';
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+LogBox.ignoreLogs([
+  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+]);
 
 enableScreens();
+
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [isReady, setIsReady] = useState(false);
+  const [flags, setFlags] = useState({});
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const _loadAssetsAsync = async () => {
+    const findAndSetFlags = await AsyncStorage.getItem('ActOneFlages').then(
+      data => {
+        if (false) {
+          setFlags(JSON.parse(data));
+          return;
+        } else {
+          setFlags(actOneFlags);
+          return;
+        }
+      },
+    );
+
+    await Promise.all([findAndSetFlags]).then(() => {
+      setIsReady(true);
+    });
   };
 
-  return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <ApplicationContextProvider>
-        <SafeAreaProvider>
-          <Timers />
-          <ApplicationContextConsumer>
-            {({notification}) => notification.state}
-          </ApplicationContextConsumer>
+  useEffect(() => {
+    _loadAssetsAsync();
+  }, []);
 
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <Navigation />
-        </SafeAreaProvider>
-      </ApplicationContextProvider>
-    </GestureHandlerRootView>
-  );
+  if (isReady)
+    return (
+      <GestureHandlerRootView style={{flex: 1}}>
+        <ApplicationContextProvider flags={flags} actTriggers={actOneTriggers}>
+          <SafeAreaProvider>
+            <NotificationContainer />
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            />
+            <Navigation />
+            <Subtitles />
+          </SafeAreaProvider>
+        </ApplicationContextProvider>
+      </GestureHandlerRootView>
+    );
+  else {
+    return <></>;
+  }
 };
 
 const styles = StyleSheet.create({

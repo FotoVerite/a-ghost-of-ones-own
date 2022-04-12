@@ -22,7 +22,6 @@ export type AlbumType = {
 };
 
 const Photos: FC<Props> = ({route, navigation}) => {
-  const routeParams = useRoute<RouteProp<screenParams, 'Album'>>();
   const insets = useSafeAreaInsets();
 
   return (

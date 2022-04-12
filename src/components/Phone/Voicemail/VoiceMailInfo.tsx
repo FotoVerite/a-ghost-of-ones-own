@@ -83,14 +83,11 @@ const VoiceMailInfo: FC<
           </Text>
           <Slider
             onTouchStart={() => setPlaying(false)}
-            // onTouchMove={() => console.log('onTouchMove')}
             onTouchEndCapture={e => {
               e.stopPropagation();
               context.player?.play(() => console.log('played'));
               setPlaying(true);
             }}
-            // onTouchEndCapture={() => console.log('onTouchEndCapture')}
-            // onTouchCancel={() => console.log('onTouchCancel')}
             onValueChange={value => {
               context.player?.setCurrentTime(value);
               setCurrentSliderValue(value);

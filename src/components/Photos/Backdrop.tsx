@@ -30,7 +30,7 @@ export type AlbumProps = {
 const Backdrop: FC<AlbumProps> = ({item, index, scrollX}) => {
   const {width, height} = Dimensions.get('window');
 
-  const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.5;
+  const ITEM_SIZE = width * 0.5;
   const BACKDROP_HEIGHT = height * 0.65;
 
   if (!item.coverPhoto) {

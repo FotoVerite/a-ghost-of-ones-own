@@ -3,7 +3,19 @@
 import React, {FC, useEffect, useState} from 'react';
 import moment, {Moment} from 'moment';
 import Sound from 'react-native-sound';
-import Notification from 'components/Notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  NotificationProps,
+  NotificationTriggerProps,
+} from 'components/Notification';
+import {ScriptTriggerType, ScriptType} from 'components/utility/Subtitle';
+
+export type TriggerMap = Map<string, TriggerType>;
+export type TriggerType = {
+  type: 'notification' | 'something';
+  time: number;
+  attributes: NotificationTriggerProps;
+};
 
 export enum TriggerState {
   NOT_TRIGGERED = 1,
@@ -11,29 +23,39 @@ export enum TriggerState {
   FINISHED,
 }
 
-export type EventType = {
-  type: 'notification' | 'other';
-  notification: Element;
-  triggered: TriggerState;
+export type NotificationTriggerType = TriggerType & {
+  type: 'notification';
 };
 
-export type EventHash = {[index: string]: EventType};
-export type EventMap = Map<string, EventType>;
-
-export type ApplicationContextTypeDigest = {};
+export type ApplicationContextTypeDigest = {
+  actTriggers: TriggerMap;
+  flags: {[index: string]: boolean};
+};
 export type ApplicationContextTypeDigested = {
+  actTriggers: TriggerMap;
   audio: {
     set: React.Dispatch<React.SetStateAction<undefined | SoundObjetType>>;
     state: undefined | SoundObjetType;
   };
+  flags: {[index: string]: boolean};
+
   startedSession: Moment;
-  notification: {
-    set: React.Dispatch<React.SetStateAction<undefined | Element>>;
-    state: undefined | Element;
+  subtitles: {
+    state: string[];
+    set: React.Dispatch<React.SetStateAction<string[]>>;
+    setAsFinished: React.Dispatch<React.SetStateAction<boolean>>;
   };
-  events: {
-    state: EventMap;
-    set: (name: string, state: TriggerState) => void;
+  script: {
+    state: ScriptType[];
+    set: React.Dispatch<React.SetStateAction<ScriptType[]>>;
+    setAsFinished: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+  notifications: {
+    set: React.Dispatch<
+      React.SetStateAction<Map<string, NotificationTriggerProps>>
+    >;
+    state: Map<string, NotificationTriggerProps>;
+    add: (attributes: NotificationTriggerProps) => void;
   };
   player?: Sound;
 };
@@ -44,24 +66,35 @@ export type SoundObjetType = {
   duration?: number;
 };
 
-const appEvents: EventMap = new Map([
-  [
-    'bankCode',
-    {
-      type: 'notification',
-      notification: (
-        <Notification
-          iconName={'message-alert-outline'}
-          delay={0}
-          title={'2033'}
-          body={`Your reset code from Citizen's Bank is 744423`}
-        />
-      ),
-      triggered: TriggerState.NOT_TRIGGERED,
-    },
-  ],
-]);
+// const appEvents: EventMap = new Map([
+//   [
+//     'bankCode',
+//     {
+//       type: 'notification',
+//       notification: (
+//         <Notification
+//           iconName={'message-alert-outline'}
+//           delay={0}
+//           title={'2033'}
+//           body={`Your reset code from Citizen's Bank is 744423`}
+//         />
+//       ),
+//       triggered: TriggerState.NOT_TRIGGERED,
+//     },
+//   ],
+// ]);
 
+function isScript(
+  trigger: NotificationTriggerType | TriggerType | ScriptTriggerType,
+): trigger is ScriptTriggerType {
+  return (trigger as ScriptTriggerType).type == 'script';
+}
+
+function isNotification(
+  trigger: NotificationTriggerType | TriggerType | ScriptTriggerType,
+): trigger is NotificationTriggerType {
+  return (trigger as NotificationTriggerType).type == 'notification';
+}
 //defaults for empty app
 export const ApplicationContext =
   React.createContext<ApplicationContextTypeDigested>({});
@@ -72,18 +105,17 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
     undefined,
   );
 
-  const [notification, setNotification] = React.useState<Element>();
-  const [events, setEvents] = React.useState<EventMap>(appEvents);
+  const [notifications, setNotifications] = React.useState<
+    Map<string, NotificationTriggerProps>
+  >(new Map());
+  const [startOfSession] = useState(moment());
+  const [subtitles, setSubtitles] = useState<string[]>([]);
+  const [script, setScript] = useState<ScriptType[]>([]);
+  const [scriptFinished, setScriptFinished] = useState<boolean>(false);
 
-  const setEventTo = (name: string, state: TriggerState) => {
-    setEvents(events => {
-      const newState = new Map(events);
-      const eventState = newState.get(name);
-      const newEventState = Object.assign({}, eventState, {triggered: state});
-      newState.set(name, newEventState);
-      return newState;
-    });
-  };
+  const [checkForTriggers, setCheckForTriggers] = useState(0);
+  const [triggers, setTriggers] = useState(props.actTriggers);
+  const [flags, setFlags] = useState(props.flags);
 
   useEffect(() => {
     Sound.setCategory('Playback');
@@ -95,15 +127,6 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
       }
     };
   }, []);
-
-  useEffect(() => {
-    events.forEach((value, key) => {
-      if (value.triggered === TriggerState.TRIGGERED) {
-        setNotification(value.notification);
-        setEventTo(key, TriggerState.FINISHED);
-      }
-    });
-  }, [events]);
 
   useEffect(() => {
     if (soundObject != null && soundObject.autoplay) {
@@ -135,23 +158,69 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
     });
   }, [soundObject?.uri]);
 
+  const addNotification = (attributes: NotificationTriggerProps) => {
+    setNotifications(notifications => {
+      const newMap = new Map(notifications);
+      newMap.set(attributes.key, attributes);
+      return newMap;
+    });
+  };
+  const pullTriggers = () => {
+    const elapsedSeconds = moment().diff(startOfSession, 'milliseconds');
+    Object.keys(flags).forEach(flag => {
+      if (!flags[flag]) {
+        const trigger = triggers.get(flag);
+        if (trigger && trigger.time < elapsedSeconds) {
+          if (isNotification(trigger)) {
+            addNotification(trigger.attributes);
+          }
+          setFlags(state => {
+            const newState = Object.assign({}, state, {[flag]: true});
+            return newState;
+          });
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      pullTriggers();
+      setCheckForTriggers(interval => interval + 1);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [checkForTriggers]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('ActOneFlages', JSON.stringify(flags));
+  }, [flags]);
+
   return (
     <ApplicationContext.Provider
       value={{
-        events: {
-          state: events,
-          set: setEventTo,
-        },
-        startedSession: moment(),
-        notification: {
-          state: notification,
-          set: setNotification,
+        startedSession: startOfSession,
+        notifications: {
+          state: notifications,
+          set: setNotifications,
+          add: addNotification,
         },
         audio: {
           set: setSoundObject,
           state: soundObject,
         },
+        flags: flags,
+        actTriggers: triggers,
         player: soundPlayer,
+        script: {
+          state: script,
+          set: setScript,
+          setAsFinished: setScriptFinished,
+        },
+        subtitles: {
+          state: subtitles,
+          set: setSubtitles,
+          setAsFinished: setScriptFinished,
+        },
       }}>
       {props.children}
     </ApplicationContext.Provider>

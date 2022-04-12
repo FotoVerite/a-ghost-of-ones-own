@@ -2,9 +2,9 @@ import {BlurView} from '@react-native-community/blur';
 import {Row} from 'components/Grid';
 import {P} from 'components/StyledText';
 import React, {FC, useContext} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import Animated, {useAnimatedProps} from 'react-native-reanimated';
+import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from 'themes';
 import {MessengerContext} from './context/MessengerContext';
@@ -12,11 +12,18 @@ import {MessengerContext} from './context/MessengerContext';
 const ConversationHeader: FC = () => {
   const context = useContext(MessengerContext);
   const {sharedValues} = context;
+  const {width, height} = Dimensions.get('window');
+
   const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
   const cheveronAnimationProps = useAnimatedProps(() => {
     return {
       opacity: sharedValues.messageSelected.value,
+      marginLeft: interpolate(
+        sharedValues.messageSelected.value,
+        [0, 1, 2],
+        [width, 0, 0],
+      ),
     };
   });
 

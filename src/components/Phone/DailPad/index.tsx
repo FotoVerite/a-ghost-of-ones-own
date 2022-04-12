@@ -12,11 +12,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 
-import styled from 'styled-components/native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ApplicationContext} from 'contexts/app';
 
-import sound1 from './assets/2.mp3';
+import sound1 from '../assets/2.mp3';
+import Header from '../Header';
+import DialButton from './DailButton';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -37,7 +38,7 @@ const buttons = [
   {main: '0', abc: '+', sound: sound1},
   {main: '#', sound: sound1},
 ];
-const Phone: FC<Props> = props => {
+const DialPad: FC<Props> = props => {
   const [number, setNumber] = useState('');
   const [longPressed, setLongPressed] = useState(false);
   const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
@@ -89,54 +90,13 @@ const Phone: FC<Props> = props => {
 
   const renderPhoneButtons = () => {
     return buttons.map((button, index) => (
-      <Pressable
-        key={`touchable.${index}`}
-        style={({pressed}) => [
-          {
-            backgroundColor: pressed
-              ? theme.colors.lightGray2
-              : theme.colors.darkSlate,
-            width: 75,
-            height: 75,
-            borderRadius: 38,
-            margin: theme.spacing.p2,
-          },
-        ]}
-        onPressIn={() => {
-          context.audio.set({uri: button.sound, volume: 20});
-          addNumber(button.main);
-        }}
-        onPressOut={() => {
-          setTimeout(() => {
-            context.audio.set(undefined);
-          }, 100);
-        }}>
-        <View style={{justifyContent: 'center'}}>
-          <P
-            style={{
-              textAlign: 'center',
-              color: 'white',
-              fontSize: 37,
-              fontWeight: 'bold',
-              paddingBottom: 12,
-            }}>
-            {button.main}
-          </P>
-          {button.abc && (
-            <P
-              style={{
-                position: 'absolute',
-                textAlign: 'center',
-                color: 'white',
-                fontSize: 16,
-                bottom: 0,
-                width: 75,
-              }}>
-              {button.abc}
-            </P>
-          )}
-        </View>
-      </Pressable>
+      <DialButton
+        abcText={button.abc}
+        setNumber={setNumber}
+        dialNumber={button.main}
+        soundFile={button.sound}
+        key={`${index}-button`}
+      />
     ));
   };
   return (
@@ -206,4 +166,4 @@ const Phone: FC<Props> = props => {
   );
 };
 
-export default Phone;
+export default DialPad;

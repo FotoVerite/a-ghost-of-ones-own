@@ -49,6 +49,7 @@ const FuseSearch: FC<NoteProps> = ({
         paddingHorizontal: theme.spacing.p1,
         width: Dimensions.get('window').width - theme.spacing.p2,
         alignItems: 'center',
+        flexGrow: 0,
       }}>
       <Icon name={'magnify'} color="#000" size={25} />
       <TextInput

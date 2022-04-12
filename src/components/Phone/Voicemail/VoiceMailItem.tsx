@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import VoiceMailInfo from './VoiceMailInfo';
 import {ApplicationContext} from 'contexts/app';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export type VoiceMailType = {
   number: string;
@@ -57,50 +58,53 @@ const VoiceMailItem: FC<
 
   return (
     <Animated.View>
-      <Pressable
-        onTouchEnd={e => {
-          openedVoiceMailId.set(
-            openedVoiceMailId.state === index ? undefined : index,
-          );
-          if (openedVoiceMailId.state === index) {
-            context.audio.set(undefined);
-          }
-        }}>
-        <Animated.View style={[{overflow: 'hidden'}, heightStyle]}>
-          <Row>
-            <View>
-              <NoteText>{number}</NoteText>
-              <NoteText style={{color: 'gray'}}>{area}</NoteText>
-            </View>
-            <View style={{marginStart: 'auto'}}>
-              <NoteText>{date.format('MM/DD/YY')}</NoteText>
-              <NoteText style={{color: 'gray', textAlign: 'right'}}>
-                {length}
-              </NoteText>
-            </View>
-          </Row>
+      <ScrollView style={{maxHeight: 400, paddingEnd: 5}}>
+        <Pressable
+          onLongPress={e => {}}
+          onPress={e => {
+            openedVoiceMailId.set(
+              openedVoiceMailId.state === index ? undefined : index,
+            );
+            if (openedVoiceMailId.state === index) {
+              context.audio.set(undefined);
+            }
+          }}>
+          <Animated.View style={[{overflow: 'hidden'}, heightStyle]}>
+            <Row>
+              <View>
+                <NoteText>{number}</NoteText>
+                <NoteText style={{color: 'gray'}}>{area}</NoteText>
+              </View>
+              <View style={{marginStart: 'auto'}}>
+                <NoteText>{date.format('MM/DD/YY')}</NoteText>
+                <NoteText style={{color: 'gray', textAlign: 'right'}}>
+                  {length}
+                </NoteText>
+              </View>
+            </Row>
+            <VoiceMailInfo
+              index={index}
+              length={length}
+              date={date}
+              transcription={transcription}
+              openedVoiceMailId={openedVoiceMailId.state}
+            />
+          </Animated.View>
+        </Pressable>
+        <Animated.View
+          style={{position: 'absolute', zIndex: -4, top: -50000}}
+          onLayout={e => {
+            setheight(e.nativeEvent.layout.height + 50);
+          }}>
           <VoiceMailInfo
             index={index}
-            length={length}
             date={date}
+            length={length}
             transcription={transcription}
             openedVoiceMailId={openedVoiceMailId.state}
           />
         </Animated.View>
-      </Pressable>
-      <Animated.View
-        style={{position: 'absolute', zIndex: -4, top: -50000}}
-        onLayout={e => {
-          setheight(e.nativeEvent.layout.height + 50);
-        }}>
-        <VoiceMailInfo
-          index={index}
-          date={date}
-          length={length}
-          transcription={transcription}
-          openedVoiceMailId={openedVoiceMailId.state}
-        />
-      </Animated.View>
+      </ScrollView>
     </Animated.View>
   );
 };

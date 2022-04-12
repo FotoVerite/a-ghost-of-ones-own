@@ -8,7 +8,7 @@ const BackButton: FC = () => {
   const {folder, noteState, note} = context;
   useEffect(() => {
     let unsubscribe: NativeEventSubscription;
-    if (noteState.state != 0) {
+    if (noteState.state > 0) {
       unsubscribe = BackHandler.addEventListener('hardwareBackPress', () => {
         noteState.set(s => (s -= 1));
         return true;

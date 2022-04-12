@@ -19,7 +19,6 @@ const VoiceMail: FC<{}> = props => {
   >(undefined);
 
   const voicemails = [
-    {},
     {
       number: 'Zola',
       length: '1:08',
@@ -27,6 +26,28 @@ const VoiceMail: FC<{}> = props => {
       date: moment('20210602T0000'),
       transcription: `What the fuck man!\n\nNo really,\nWhat, Where, You, Thinking.\n\nAnd this silent treatment isn't helping.\nStop this shit and fix it.`,
       uri: zolaAngry,
+    },
+    {
+      number: 'Unkown',
+      length: '00:45',
+      area: 'New York, NY',
+      date: moment('20210502172300'),
+      transcription: `The phone isn't haunted.\nIt's just a medium.\nThe message isn't the medium.\nI'm not a fucking digita signal\n\nHow dumb are you? A phone haunted.\n\nha ha ha\n\nObject's can't be haunted.\nThey're objects! Without consciousness. Without a soul.\nWhat would the point be of haunting a rock, a river, a house even!\n
+
+It is people that are haunted.  
+By grief,  by longing,  by regret,  and pain. 
+Sweet  sweet  pain. 
+
+A rock does not have pain.  
+It can contain pain.  But not to itself.  
+Only to the people who see it,   who can sense the pain.
+
+Without people there are no ghosts. 
+
+They're just objects.  They go on like me.  
+
+So solid and steady,  and ever here.`,
+      uri: ghost,
     },
     {
       number: 'Zola',
@@ -116,28 +137,6 @@ Look we really should talk face to face about Sunday.
 Are you free tonight? `,
       uri: chris,
     },
-    {
-      number: 'Unkown',
-      length: '00:45',
-      area: 'New York, NY',
-      date: moment('20210502172300'),
-      transcription: `The phone isn't haunted.\nIt's just a medium.\nThe message isn't the medium.\nI'm not a fucking digita signal\n\nHow dumb are you? A phone haunted.\n\nha ha ha\n\nObject's can't be haunted.\nThey're objects! Without consciousness. Without a soul.\nWhat would the point be of haunting a rock, a river, a house even!\n
-
-It is people that are haunted.  
-By grief,  by longing,  by regret,  and pain. 
-Sweet  sweet  pain. 
-
-A rock does not have pain.  
-It can contain pain.  But not to itself.  
-Only to the people who see it,   who can sense the pain.
-
-Without people there are no ghosts. 
-
-They're just objects.  They go on like me.  
-
-So solid and steady,  and ever here.`,
-      uri: ghost,
-    },
   ];
 
   const renderItem: ListRenderItem<VoiceMailType> = ({item, index}) => {
@@ -151,6 +150,9 @@ So solid and steady,  and ever here.`,
   };
   return (
     <Layout>
+      <NoteText size="l" style={{marginTop: theme.spacing.p2}}>
+        Voicemail
+      </NoteText>
       <FlatList
         bounces
         style={{padding: theme.spacing.p1}}

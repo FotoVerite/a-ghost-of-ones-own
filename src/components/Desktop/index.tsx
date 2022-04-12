@@ -1,21 +1,13 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {screenParams} from 'components/Navigation/screens';
 import {RouteProp} from '@react-navigation/core';
 import Fuse from 'fuse.js';
 
 import {Layout, Row} from 'components/Grid';
-import {
-  Dimensions,
-  ImageBackground,
-  PanResponder,
-  StatusBar,
-  TextInput,
-  View,
-} from 'react-native';
+import {ImageBackground, StatusBar, View} from 'react-native';
 
 import bg from 'assets/images/backgrounds/snow-egg.jpeg';
-import {P} from 'components/StyledText';
 import {Application} from './Application';
 
 import messenger from './icons/messenger.png';
@@ -26,6 +18,7 @@ import AppLibrary from './AppLibrary';
 
 import theme from 'themes';
 import {useFocusEffect} from '@react-navigation/native';
+import {PanGestureHandler} from 'react-native-gesture-handler';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -34,31 +27,6 @@ type Props = {
 
 const Desktop: FC<Props> = props => {
   const [appLibrary, setAppLibrary] = useState(false);
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-
-      onPanResponderMove: (e, state) => {
-        if (state.dx < 200 && state.vx < -1) {
-          setAppLibrary(true);
-        }
-      },
-      onPanResponderRelease: () => {},
-    }),
-  ).current;
-
-  const appLibraryPanResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-
-      onPanResponderMove: (e, state) => {
-        if (state.dx > 200) {
-          setAppLibrary(false);
-        }
-      },
-      onPanResponderRelease: () => {},
-    }),
-  ).current;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -87,9 +55,16 @@ const Desktop: FC<Props> = props => {
     <>
       <ImageBackground source={bg} resizeMode="cover" style={{flex: 1}}>
         <Layout>
-          <View
-            style={{flexGrow: 1, borderColor: 'red'}}
-            {...panResponder.panHandlers}></View>
+          <PanGestureHandler
+            activeOffsetX={[-50, 50]}
+            onGestureEvent={e => {
+              setAppLibrary(e.nativeEvent.translationX < 0);
+            }}>
+            <View
+              style={{
+                flexGrow: 1,
+              }}></View>
+          </PanGestureHandler>
           <Row
             style={{
               flexGrow: 0,

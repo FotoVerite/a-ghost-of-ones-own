@@ -18,6 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import BackdropRenderer from './BackdropRenderer';
 import {AlbumProps, PhotoContext} from './context';
+import Header from './Header';
 
 type Props = {
   navigation: any;
@@ -82,6 +83,7 @@ const Albums: FC<Props> = ({route, navigation}) => {
   return (
     <Layout style={{backgroundColor: 'black', flex: 1}}>
       <StatusBar hidden />
+      <Header />
       <BackdropRenderer images={albums} scrollX={scrollX} />
 
       <AnimatedFlatlist

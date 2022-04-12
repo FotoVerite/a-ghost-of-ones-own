@@ -1,4 +1,7 @@
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {Row} from 'components/Grid';
+import {screenParams} from 'components/Navigation/screens';
 import {P} from 'components/StyledText';
 import React, {FC, useContext} from 'react';
 import {StyleSheet, TouchableHighlight, View} from 'react-native';
@@ -7,9 +10,7 @@ import Animated, {
   interpolateColor,
   useAnimatedProps,
 } from 'react-native-reanimated';
-import {red} from 'react-native-redash';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import theme from 'themes';
 import {NoteContext} from './context/NoteContext';
 
 const Header: FC = () => {
@@ -17,10 +18,20 @@ const Header: FC = () => {
   const {sharedValues, folder, note} = context;
   const AnimatedIcon = Animated.createAnimatedComponent(Icon);
   const AnimatedP = Animated.createAnimatedComponent(P);
+  const navigation = useNavigation<StackNavigationProp<screenParams>>();
 
   const cheveronAnimationProps = useAnimatedProps(() => {
     return {
-      opacity: sharedValues.folderSelected.value,
+      fontSize: interpolate(
+        sharedValues.folderSelected.value,
+        [0, 1, 2],
+        [14, 20, 20],
+      ),
+      color: interpolateColor(
+        sharedValues.folderSelected.value,
+        [0, 1, 2],
+        ['white', 'yellow', 'yellow'],
+      ),
     };
   });
 
@@ -39,7 +50,7 @@ const Header: FC = () => {
       marginLeft: interpolate(
         sharedValues.folderSelected.value,
         [0, 1, 2],
-        [-10, 10, -100],
+        [0, 0, -100],
       ),
       marginTop: interpolate(
         sharedValues.folderSelected.value,
@@ -49,22 +60,12 @@ const Header: FC = () => {
     };
   });
 
-  const AnimatedNoteTitleProp = useAnimatedProps(() => {
+  const BackAnimatedProps = useAnimatedProps(() => {
     return {
-      fontSize: interpolate(
-        sharedValues.folderSelected.value,
-        [0, 1, 2],
-        [26, 16, 16],
-      ),
       marginLeft: interpolate(
         sharedValues.folderSelected.value,
         [0, 1, 2],
-        [-10, 10, -100],
-      ),
-      marginTop: interpolate(
-        sharedValues.folderSelected.value,
-        [0, 1, 2],
-        [18, 0, 2],
+        [10, -100, -100],
       ),
     };
   });
@@ -76,26 +77,41 @@ const Header: FC = () => {
           style={{
             zIndex: 5,
             height: 20,
+            width: 45,
             backgroundColor: 'black',
             paddingLeft: 24,
           }}>
           <TouchableHighlight
-            onPress={() => context.noteState.set(state => (state -= 1))}>
+            onPress={() => {
+              if (context.noteState.state > 0)
+                context.noteState.set(state => (state -= 1));
+              else navigation.navigate('Desktop');
+            }}>
             <AnimatedIcon
               name="chevron-left"
-              size={20}
-              color={'yellow'}
-              style={[{}, cheveronAnimationProps]}
+              style={[cheveronAnimationProps]}
             />
           </TouchableHighlight>
         </View>
         <AnimatedP
           style={[
             {
+              fontSize: 12,
+              color: 'white',
+              marginTop: -2,
+            },
+            BackAnimatedProps,
+          ]}>
+          Back
+        </AnimatedP>
+        <AnimatedP
+          style={[
+            {
               fontSize: 26,
               color: 'white',
               marginTop: 18,
-              marginLeft: -10,
+              left: 55,
+              position: 'absolute',
             },
             FolderAnimatedProps,
           ]}>

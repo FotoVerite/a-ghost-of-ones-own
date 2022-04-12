@@ -67,8 +67,6 @@ const Search: FC = ({type}) => {
         }
         placeholder="Search"
         onChangeText={text => {
-          console.log('searchable');
-
           let results = fuse.search(text);
           if (text == undefined || text === '') {
             results = conversations;
