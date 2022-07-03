@@ -8,6 +8,7 @@ import {StyleSheet, TouchableHighlight, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from 'themes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+Icon.loadFont();
 
 const Header: FC = () => {
   const navigation = useNavigation<StackNavigationProp<screenParams>>();

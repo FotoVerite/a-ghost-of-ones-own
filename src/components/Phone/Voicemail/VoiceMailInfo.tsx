@@ -15,6 +15,7 @@ import Slider from '@react-native-community/slider';
 import {ApplicationContext} from 'contexts/app';
 import Icon from 'react-native-vector-icons/Entypo';
 import {VoiceMailType} from './VoiceMailItem';
+Icon.loadFont();
 
 const VoiceMailInfo: FC<
   VoiceMailType & {index: number; openedVoiceMailId: number}

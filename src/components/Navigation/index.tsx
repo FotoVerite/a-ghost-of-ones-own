@@ -10,6 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {ColorSchemeName} from 'react-native';
 import {screenParams, SCREENS} from './screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDidMountEffect} from 'hooks/useDidMountEffect';
 
 const Stack = createSharedElementStackNavigator<screenParams>();
 
@@ -29,12 +30,12 @@ const Navigation: FC<{}> = props => {
   );
 
   useEffect(() => {
-    AsyncStorage.getItem('openingSeen').then(bool =>
-      setHasSeenOpening(bool ? bool != '' : false),
-    );
+    AsyncStorage.getItem('openingSeen').then(bool => {
+      setHasSeenOpening(bool != null);
+    });
   }, []);
 
-  useEffect(() => {
+  useDidMountEffect(() => {
     setFinished(true);
   }, [hasSeenOpening]);
 
@@ -42,7 +43,7 @@ const Navigation: FC<{}> = props => {
     return (
       <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator
-          initialRouteName={hasSeenOpening ? 'Desktop' : 'Opening'}
+          initialRouteName={hasSeenOpening ? 'Storybook' : 'Opening'}
           screenOptions={{
             headerShown: false,
             cardStyle: {backgroundColor: 'transparent'},

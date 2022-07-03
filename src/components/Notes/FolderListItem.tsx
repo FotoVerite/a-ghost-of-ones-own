@@ -5,6 +5,7 @@ import {TouchableHighlight, View} from 'react-native';
 import {FolderProps, NoteContext} from './context/NoteContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from 'themes';
+Icon.loadFont();
 
 const NoteListItem: FC<{folder: FolderProps}> = ({folder}) => {
   const context = useContext(NoteContext);

@@ -14,11 +14,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import {ApplicationContext} from 'contexts/app';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
+import {CommonActions, RouteProp} from '@react-navigation/native';
 import {screenParams} from 'components/Navigation/screens';
 import {useDidMountEffect} from '../hooks/useDidMountEffect';
-import {duration} from 'moment';
 import {runOnJS} from 'react-native-reanimated/src/reanimated2/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -53,7 +53,12 @@ const OsLoading: FC<Props> = ({navigation}) => {
 
   useDidMountEffect(() => {
     if (context.script.state.length === 0) {
-      navigation.navigate('Desktop');
+      AsyncStorage.setItem('openingSeen', 'true');
+      let resetAction = CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Desktop'}],
+      });
+      navigation.dispatch(resetAction);
     }
   }, [context.script.state]);
 

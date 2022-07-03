@@ -4,7 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {FlatList, ListRenderItem, View} from 'react-native';
 
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from 'rn-id-blurview';
 import Animated, {SlideInRight, SlideOutRight} from 'react-native-reanimated';
 import FuseSearch from 'components/utility/FuseSearch';
 
@@ -15,6 +15,7 @@ import {Bold} from 'components/StyledText';
 
 import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
+Icon.loadFont();
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 

@@ -1,18 +1,10 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {FC, useContext} from 'react';
 import {Dimensions, FlatList, ListRenderItem, View} from 'react-native';
 
 import theme from 'themes';
 import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
-import {
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
-import {
-  ConversationType,
-  ExchangeType,
-  MessengerContext,
-} from './context/MessengerContext';
-import {ExchangeItemType} from './Exchanges';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {ExchangeType, MessengerContext} from './context/MessengerContext';
 import Exchange from './Exchange';
 import {P} from 'components/StyledText';
 import {Row} from 'components/Grid';

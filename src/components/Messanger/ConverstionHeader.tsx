@@ -1,4 +1,4 @@
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from 'rn-id-blurview';
 import {Row} from 'components/Grid';
 import {P} from 'components/StyledText';
 import React, {FC, useContext} from 'react';
@@ -8,6 +8,8 @@ import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from 'themes';
 import {MessengerContext} from './context/MessengerContext';
+
+Icon.loadFont();
 
 const ConversationHeader: FC = () => {
   const context = useContext(MessengerContext);

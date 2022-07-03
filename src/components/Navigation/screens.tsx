@@ -12,7 +12,13 @@ import PhotosViewer from 'components/Photos/PhotosViewer';
 import ScratchPad from 'components/ScratchPad';
 import OsLoading from 'OsLoading';
 
+import StoryBook from '../../../storybook';
+
 export const SCREENS = {
+  StoryBook: {
+    title: '',
+    component: StoryBook,
+  },
   Bank: {
     title: '',
     component: Bank,
@@ -86,6 +92,7 @@ export type screenParams = {
   PhotosApp: undefined;
   ScratchPad: undefined;
   Scruff: undefined;
+  StoryBook: undefined;
 };
 
 export type AppRoutes = keyof typeof SCREENS;

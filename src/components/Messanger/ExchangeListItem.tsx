@@ -1,20 +1,9 @@
-import {transform} from '@babel/core';
 import {Row} from 'components/Grid';
 import {Bold, P} from 'components/StyledText';
 import React, {FC} from 'react';
-import {
-  ColorValue,
-  Image,
-  ImageBackground,
-  ImageSourcePropType,
-  ImageStyle,
-  View,
-} from 'react-native';
+import {Image, ImageSourcePropType, ImageStyle, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SharedValue} from 'react-native-reanimated';
-import styled from 'styled-components/native';
 import theme from 'themes';
-import TextBubble from './TextBubble';
 
 type Props = {
   avatarSprite: ImageSourcePropType;

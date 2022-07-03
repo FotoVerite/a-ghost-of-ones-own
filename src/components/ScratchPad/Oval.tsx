@@ -1,24 +1,14 @@
-import React, {FC, useContext, useEffect, useState} from 'react';
-import {Dimensions, View} from 'react-native';
+import React, {FC, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Bold, P} from 'components/StyledText';
-
-import theme from 'themes';
 import Animated, {
   Easing,
-  LightSpeedInLeft,
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import {TapGestureHandler} from 'react-native-gesture-handler';
-import {Layout, Row} from 'components/Grid';
-import {ApplicationContext} from 'contexts/app';
-import LinearGradient from 'react-native-linear-gradient';
+Icon.loadFont();
 
 type Props = {height: number; width: number; step: number; stepIn: number};
 

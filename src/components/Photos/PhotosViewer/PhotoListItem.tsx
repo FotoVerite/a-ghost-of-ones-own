@@ -14,6 +14,7 @@ import {NoteText, P} from 'components/StyledText';
 import {Row} from 'components/Grid';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {PanGestureHandler} from 'react-native-gesture-handler';
+Icon.loadFont();
 
 type Props = {photo: PhotoProps; index: number};
 

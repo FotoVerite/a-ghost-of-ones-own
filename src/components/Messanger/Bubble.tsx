@@ -1,5 +1,5 @@
 import React, {FC, useContext} from 'react';
-import {Image, ViewStyle} from 'react-native';
+import {Image, View, ViewStyle} from 'react-native';
 
 import {P} from 'components/StyledText';
 
@@ -8,6 +8,7 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {MessagesType, MessengerContext} from './context/MessengerContext';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Bubble: FC<{
   avatar: any;
@@ -255,38 +256,62 @@ const Bubble: FC<{
   //   if (typeof color === 'string')
   //     return <View style={[basicStyles, styles]}>{renderMessage(true)}</View>;
   //   else return renderLinearGradiantMessageView();
+  console.log(message.options);
   return (
-    <LinearGradient
-      colors={(color || ['blue', '#000AAA']) as string[]}
-      style={[basicStyles]}>
-      {message.type === 'text' && (
-        <P
+    <View>
+      {message.options?.icon && (
+        <View
           style={{
-            padding: 4,
-            color: 'white',
-            margin: 0,
-            textAlign: avatar ? 'left' : 'right',
-            fontSize: 13,
+            position: 'absolute',
+            top: -10,
+            left: avatar ? undefined : -15,
+            right: avatar ? -15 : undefined,
+            zIndex: 2,
+            padding: 6,
+            backgroundColor: 'gray',
+            borderRadius: theme.BorderRadius.normal,
           }}>
-          {message.content}
-        </P>
-      )}
-      {message.type === 'image' && (
-        <TouchableWithoutFeedback onPress={() => context.message.set(message)}>
-          <Image
-            source={message.content}
-            style={{
-              alignSelf: 'center',
-              padding: 0,
-              height:
-                (ScreenWidth * 0.8) / message.options.aspect - theme.spacing.p4,
-              aspectRatio: message.options.aspect,
-              margin: theme.spacing.p2,
-            }}
+          <Icon
+            name={message.options.icon.name}
+            color={message.options.icon.color}
+            size={15}
           />
-        </TouchableWithoutFeedback>
+        </View>
       )}
-    </LinearGradient>
+      <LinearGradient
+        colors={(color || ['blue', '#000AAA']) as string[]}
+        style={[basicStyles]}>
+        {message.type === 'text' && (
+          <P
+            style={{
+              padding: 4,
+              color: 'white',
+              margin: 0,
+              textAlign: avatar ? 'left' : 'right',
+              fontSize: 13,
+            }}>
+            {message.content}
+          </P>
+        )}
+        {message.type === 'image' && (
+          <TouchableWithoutFeedback
+            onPress={() => context.message.set(message)}>
+            <Image
+              source={message.content}
+              style={{
+                alignSelf: 'center',
+                padding: 0,
+                height:
+                  (ScreenWidth * 0.8) / message.options.aspect -
+                  theme.spacing.p4,
+                aspectRatio: message.options.aspect,
+                margin: theme.spacing.p2,
+              }}
+            />
+          </TouchableWithoutFeedback>
+        )}
+      </LinearGradient>
+    </View>
   );
 };
 

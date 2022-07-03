@@ -19,6 +19,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AnimatePresence, MotiView, useDynamicAnimation} from 'moti';
 import theme from 'themes';
 
+Icon.loadFont();
+
 export type NotificationProps = {
   title: string;
   body: string;

@@ -4,6 +4,7 @@ import {FolderProps} from 'components/Notes/context/NoteContext';
 import {Moment} from 'moment';
 import React, {FC, useEffect, useState} from 'react';
 import {Image, ImageURISource} from 'react-native';
+import {IconType} from 'react-native-elements/dist/icons/Icon';
 
 import {
   runOnJS,
@@ -21,7 +22,7 @@ import {grindrReset} from '../exchanges/grindrReset';
 import {matthew} from '../exchanges/matthew';
 import {movieNight} from '../exchanges/moveNight';
 import seemlessOrders from '../exchanges/seemless';
-import {zola} from '../exchanges/zola';
+import {zola} from '../exchanges/zola/index';
 
 export type MessagesType = {
   type: 'text' | 'image';
@@ -35,6 +36,7 @@ export type ExchangeType = {
   messages: MessagesType[];
   name?: string;
   timeStamp?: Moment;
+  icon?: string;
 };
 
 export type ConversationType = {
