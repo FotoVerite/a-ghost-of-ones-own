@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {Layout} from 'components/Grid';
 
-import Header from './Header';
+import Header from './NewHeader';
 
 import NoteContextProvider from './context/NoteContext';
 import Folders from './Folders';
@@ -12,6 +12,7 @@ import NotesList from './NotesList';
 import BackButton from './BackButton';
 import Note from './Note';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar, View} from 'react-native';
 
 type Props = {
   navigation: any;
@@ -20,19 +21,21 @@ type Props = {
 
 const Notes: FC<Props> = ({route, navigation}) => {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
       <NoteContextProvider>
+        <StatusBar hidden />
         <BackButton />
         <Layout
           style={{
             backgroundColor: 'black',
             flex: 1,
-            padding: theme.spacing.p2,
             margin: 0,
           }}>
           <Header />
-          <Search type="folder" />
-          <Folders />
+          <View style={{paddingHorizontal: theme.spacing.p2}}>
+            <Search type="folder" />
+            <Folders />
+          </View>
           <NotesList />
           <Note />
         </Layout>

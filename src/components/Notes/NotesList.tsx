@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {P} from 'components/StyledText';
 import Search from './Search';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const NotesList: FC = () => {
   const context = useContext(NoteContext);
@@ -31,14 +32,8 @@ const NotesList: FC = () => {
     };
   });
 
-  const PAnimatedProps = useAnimatedProps(() => {
+  const touchableAnimatedProps = useAnimatedProps(() => {
     return {
-      fontSize: interpolate(
-        sharedValues.folderSelected.value,
-        [0, 1, 2],
-        [26, 26, 16],
-      ),
-
       marginLeft: interpolate(
         sharedValues.folderSelected.value,
         [0, 1, 2],
@@ -48,6 +43,16 @@ const NotesList: FC = () => {
         sharedValues.folderSelected.value,
         [0, 1, 2],
         [18, 0, -25],
+      ),
+    };
+  });
+
+  const PAnimatedProps = useAnimatedProps(() => {
+    return {
+      fontSize: interpolate(
+        sharedValues.folderSelected.value,
+        [0, 1, 2],
+        [26, 26, 16],
       ),
     };
   });
@@ -63,7 +68,7 @@ const NotesList: FC = () => {
           backgroundColor: 'black',
           paddingHorizontal: theme.spacing.p2,
           zIndex: 5,
-          top: 50,
+          top: 25,
           position: 'absolute',
           width: width,
           flex: 1,
@@ -72,9 +77,18 @@ const NotesList: FC = () => {
         },
         ViewAnimatedProps,
       ]}>
-      <AnimatedP style={[{color: 'white', fontSize: 36}, PAnimatedProps]}>
-        {context.folder.state?.title}
-      </AnimatedP>
+      <Animated.View style={[touchableAnimatedProps]}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            if (context.noteState.state === 2) {
+              context.noteState.set(state => (state -= 1));
+            }
+          }}>
+          <AnimatedP style={[{color: 'white', fontSize: 36}, PAnimatedProps]}>
+            {context.folder.state?.title}
+          </AnimatedP>
+        </TouchableWithoutFeedback>
+      </Animated.View>
       <Search type="note" />
       <FlatList
         ItemSeparatorComponent={props => {

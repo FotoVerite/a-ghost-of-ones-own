@@ -28,7 +28,7 @@ const Note: FC = () => {
           backgroundColor: 'black',
           paddingHorizontal: theme.spacing.p2,
           zIndex: 10,
-          top: 50,
+          top: 25,
           position: 'absolute',
           width: width,
           flex: 1,

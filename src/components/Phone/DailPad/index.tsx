@@ -18,8 +18,6 @@ import {ApplicationContext} from 'contexts/app';
 import sound1 from '../assets/2.mp3';
 import Header from '../Header';
 import DialButton from './DailButton';
-Icon.loadFont();
-EntypoIcon.loadFont();
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;

@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from 'themes';
 import {TapGestureHandler} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-Icon.loadFont();
 
 type Props = {
   navigation: NavigationProp<'Album'>;

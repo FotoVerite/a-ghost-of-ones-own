@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-import {Image, View} from 'react-native';
+import React, {FC, useContext} from 'react';
+import {Image, TouchableHighlight, View} from 'react-native';
 import CRC32 from 'crc-32';
 import {P} from 'components/StyledText';
 import {ExchangeType} from './context/MessengerContext';
@@ -45,7 +45,8 @@ const Exchange: FC<{
             marginBottom: 4,
             alignContent: 'center',
             justifyContent: 'center',
-          }}></Row>
+          }}
+        />
         <Row style={{flexGrow: 0, alignItems: 'flex-end'}}>
           {avatar && (
             <Image

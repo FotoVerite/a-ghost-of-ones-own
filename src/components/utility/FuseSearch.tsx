@@ -5,7 +5,6 @@ import {Dimensions, ScrollView, TextInput, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import theme from 'themes';
-Icon.loadFont();
 
 export type NoteProps = {
   title: string;

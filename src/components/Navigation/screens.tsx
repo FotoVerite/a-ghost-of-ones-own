@@ -1,5 +1,6 @@
 import {Bank} from 'components/Bank';
 import Desktop from 'components/Desktop';
+import Discord from 'components/Discord';
 import LiquidSwiper from 'components/LiquidSwiper';
 import Messenger from 'components/Messanger/';
 import NesGamepad from 'components/NesGamepad';
@@ -12,13 +13,7 @@ import PhotosViewer from 'components/Photos/PhotosViewer';
 import ScratchPad from 'components/ScratchPad';
 import OsLoading from 'OsLoading';
 
-import StoryBook from '../../../storybook';
-
 export const SCREENS = {
-  StoryBook: {
-    title: '',
-    component: StoryBook,
-  },
   Bank: {
     title: '',
     component: Bank,
@@ -26,6 +21,11 @@ export const SCREENS = {
   Desktop: {
     title: '',
     component: Desktop,
+  },
+
+  Discord: {
+    title: '',
+    component: Discord,
   },
   Phone: {
     title: '',
@@ -79,6 +79,7 @@ export type screenParams = {
   };
   Bank: undefined;
   Desktop: undefined;
+  Discord: undefined;
   Gamepad: undefined;
   Grindr: undefined;
   LiquidSwiper: undefined;
@@ -92,7 +93,6 @@ export type screenParams = {
   PhotosApp: undefined;
   ScratchPad: undefined;
   Scruff: undefined;
-  StoryBook: undefined;
 };
 
 export type AppRoutes = keyof typeof SCREENS;

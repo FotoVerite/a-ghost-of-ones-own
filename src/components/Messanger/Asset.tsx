@@ -44,17 +44,18 @@ const Asset: FC = () => {
         },
         AssetAnimationStyles,
       ]}>
-      <Row
-        style={{
-          backgroundColor: 'gray',
-          height: 50,
-          flexGrow: 0,
-          alignItems: 'center',
-        }}>
-        <TouchableWithoutFeedback onPress={() => context.messengerState.set(1)}>
+      <TouchableWithoutFeedback onPress={() => context.messengerState.set(1)}>
+        <Row
+          style={{
+            backgroundColor: 'gray',
+            height: 50,
+            flexGrow: 0,
+            alignItems: 'center',
+          }}>
           <P style={{color: 'blue', marginLeft: theme.spacing.p2}}>DONE</P>
-        </TouchableWithoutFeedback>
-      </Row>
+        </Row>
+      </TouchableWithoutFeedback>
+
       <View
         style={{
           flexGrow: 1,

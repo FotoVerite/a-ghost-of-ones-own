@@ -9,14 +9,20 @@ import {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
+import {anxiety} from '../notes/anxiety';
+import {chalk} from '../notes/chalk';
+import {coldBrew} from '../notes/coldBrew';
+import {dating} from '../notes/dating';
 import {dreams} from '../notes/dreams';
 import {gardening} from '../notes/gardening';
 import {hallway} from '../notes/hallway';
 import {InTheBackOfTheirHead} from '../notes/inTheBackOfTheirHead';
 import {lastNight} from '../notes/lastNight';
 import {mirrors} from '../notes/mirrors';
+import {nsa} from '../notes/nsa';
 import {record_posts} from '../notes/record_posts';
 import {screenTime} from '../notes/screentime';
+import {swarm} from '../notes/swarm';
 import {theCeiling} from '../notes/theCeiling';
 import {whatScaresMe} from '../notes/whatScaresMe';
 
@@ -71,23 +77,26 @@ const NoteContextProvider: FC<NoteContextTypeDigest> = props => {
   const folderSelected = useSharedValue(0);
 
   const folder1 = {
-    title: 'One',
-    notes: [],
+    title: 'Personal',
+    notes: [anxiety, nsa, InTheBackOfTheirHead],
   };
 
   const folder2 = {
     title: 'Notes',
     notes: [
+      chalk,
       record_posts,
       screenTime,
+      coldBrew,
       dreams,
       lastNight,
-      InTheBackOfTheirHead,
       whatScaresMe,
       gardening,
       theCeiling,
       hallway,
+      dating,
       mirrors,
+      swarm,
     ],
   };
 

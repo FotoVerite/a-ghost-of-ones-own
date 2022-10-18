@@ -12,7 +12,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {NoteContext} from './context/NoteContext';
-Icon.loadFont();
 
 const Header: FC = () => {
   const context = useContext(NoteContext);

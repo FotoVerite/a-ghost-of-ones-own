@@ -1,13 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 
-import {
-  DarkTheme,
-  NavigationContainer,
-  useRoute,
-} from '@react-navigation/native';
+import {DarkTheme, NavigationContainer} from '@react-navigation/native';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import {createStackNavigator} from '@react-navigation/stack';
-import {ColorSchemeName} from 'react-native';
 import {screenParams, SCREENS} from './screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDidMountEffect} from 'hooks/useDidMountEffect';
@@ -25,9 +19,7 @@ const forFade = ({current}) => ({
 
 const Navigation: FC<{}> = props => {
   const [finished, setFinished] = useState(false);
-  const [hasSeenOpening, setHasSeenOpening] = useState<boolean | undefined>(
-    undefined,
-  );
+  const [hasSeenOpening, setHasSeenOpening] = useState<boolean | undefined>();
 
   useEffect(() => {
     AsyncStorage.getItem('openingSeen').then(bool => {
@@ -39,11 +31,11 @@ const Navigation: FC<{}> = props => {
     setFinished(true);
   }, [hasSeenOpening]);
 
-  if (finished)
+  if (finished) {
     return (
       <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator
-          initialRouteName={hasSeenOpening ? 'Storybook' : 'Opening'}
+          initialRouteName={hasSeenOpening ? 'Desktop' : 'Opening'}
           screenOptions={{
             headerShown: false,
             cardStyle: {backgroundColor: 'transparent'},
@@ -66,7 +58,9 @@ const Navigation: FC<{}> = props => {
         </Stack.Navigator>
       </NavigationContainer>
     );
-  else return <></>;
+  } else {
+    return <></>;
+  }
 };
 
 export default Navigation;

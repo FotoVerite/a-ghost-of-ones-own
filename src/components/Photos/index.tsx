@@ -12,9 +12,6 @@ type Props = {
   route: RouteProp<Record<string, object | undefined>, 'Photos'>;
 };
 
-export const ITEM_SIZE_RATIO = 0.5;
-export const ALBUM_PHOTO_SIZE_RATIO = 0.8;
-
 const Photos: FC<Props> = ({route, navigation}) => {
   return (
     <PhotoContextProvider>

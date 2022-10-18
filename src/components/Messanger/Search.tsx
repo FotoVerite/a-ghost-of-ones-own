@@ -4,7 +4,6 @@ import Fuse from 'fuse.js';
 import theme from 'themes';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-Icon.loadFont();
 import {ConversationType, MessengerContext} from './context/MessengerContext';
 import Animated, {
   useAnimatedProps,
@@ -12,7 +11,6 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 import {Input} from 'react-native-elements';
-Icon.loadFont();
 
 const Search: FC = ({type}) => {
   const context = useContext(MessengerContext);

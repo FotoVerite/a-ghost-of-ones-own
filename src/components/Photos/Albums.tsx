@@ -17,16 +17,18 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import BackdropRenderer from './BackdropRenderer';
-import {AlbumProps, PhotoContext} from './context';
+import {
+  AlbumProps,
+  ALBUM_PHOTO_SIZE_RATIO,
+  ITEM_SIZE_RATIO,
+  PhotoContext,
+} from './context';
 import Header from './Header';
 
 type Props = {
   navigation: any;
   route: RouteProp<Record<string, object | undefined>, 'Albums'>;
 };
-
-export const ITEM_SIZE_RATIO = 0.5;
-export const ALBUM_PHOTO_SIZE_RATIO = 0.8;
 
 const Albums: FC<Props> = ({route, navigation}) => {
   const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList);

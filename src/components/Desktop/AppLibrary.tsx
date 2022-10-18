@@ -15,7 +15,6 @@ import {Bold} from 'components/StyledText';
 
 import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
-Icon.loadFont();
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 
@@ -49,6 +48,17 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
         />
       ),
       name: 'notes',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          image={notepad}
+          title={'Discord'}
+          navigateTo={'Discord'}
+          navigation={navigation}
+        />
+      ),
+      name: 'discord',
     },
     {
       component: (

@@ -24,6 +24,9 @@ import actOneTriggers from 'assets/triggers/act_1_triggers';
 import NotificationContainer from 'components/Notification/NotificationContainer';
 import 'react-native-reanimated';
 import Subtitles from 'components/utility/Subtitle';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -60,6 +63,9 @@ const App = () => {
 
   useEffect(() => {
     _loadAssetsAsync();
+    Icon.loadFont();
+    EntypoIcon.loadFont();
+    FontAwesome.loadFont();
   }, []);
 
   if (isReady)

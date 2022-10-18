@@ -4,7 +4,6 @@ import {Vector} from 'react-native-redash';
 
 import {Side} from './Wave';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-Icon.loadFont();
 const RADIUS = 25;
 
 interface ButtonProps {

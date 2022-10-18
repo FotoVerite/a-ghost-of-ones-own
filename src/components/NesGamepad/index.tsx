@@ -25,7 +25,13 @@ import {difference, isEqual} from 'lodash';
 import Svg, {Path} from 'react-native-svg';
 
 const NesGamepad: FC = () => {
-  const {width, height} = Dimensions.get('window');
+  let {width, height} = Dimensions.get('window');
+  // if (width < height) {
+  //   const oldWidth = width;
+  //   const oldHeight = height;
+  //   width = oldHeight;
+  //   height = oldWidth;
+  // }
   const insets = useSafeAreaInsets();
   const context = useContext(ApplicationContext);
   const [code, setCode] = useState(new Array<string>());
@@ -132,13 +138,17 @@ const NesGamepad: FC = () => {
   const AnimatedPath = Animated.createAnimatedComponent(Path);
 
   return (
-    <Layout style={{backgroundColor: 'gray'}}>
+    <Layout
+      style={{
+        backgroundColor: 'gray',
+      }}>
       <View
         style={{
           backgroundColor: 'black',
           marginHorizontal: theme.spacing.p2,
           marginVertical: theme.spacing.p4,
           flexGrow: 1,
+          flexDirection: 'row',
         }}>
         <Row style={{justifyContent: 'space-evenly'}}>
           <View style={{width: '33%', justifyContent: 'center'}}>

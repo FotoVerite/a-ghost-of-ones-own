@@ -82,4 +82,14 @@ const theme: {
   },
 };
 
+export const discordTheme = {
+  colors: {
+    accent: '#7289da',
+    gray60: '#424549',
+    gray50: '#36393e',
+    gray40: '#282b30',
+    gray30: '#1e2124',
+  },
+};
+
 export default theme;

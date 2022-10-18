@@ -9,8 +9,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Search from './Search';
 import theme from 'themes';
 
-Icon.loadFont();
-
 const Header: FC = () => {
   const navigation = useNavigation<StackNavigationProp<screenParams>>();
 

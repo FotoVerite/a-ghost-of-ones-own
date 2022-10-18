@@ -11,6 +11,9 @@ import coil from 'components/Notes/notes/images/records/coil.jpeg';
 import {recent} from '../albums/recent';
 import {SharedValue, useSharedValue} from 'react-native-reanimated';
 
+export const ALBUM_PHOTO_SIZE_RATIO = 0.8;
+export const ITEM_SIZE_RATIO = 0.5;
+
 export type AlbumProps = {
   title: string;
   coverPhoto: ImageURISource;

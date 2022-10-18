@@ -10,8 +10,6 @@ import {StyleSheet, TouchableHighlight} from 'react-native';
 import theme from 'themes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-Icon.loadFont();
-
 const Header: FC = () => {
   const navigation = useNavigation<StackNavigationProp<screenParams>>();
   const insets = useSafeAreaInsets();

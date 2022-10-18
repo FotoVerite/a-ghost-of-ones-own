@@ -1,0 +1,3 @@
+info Found Xcode workspace "AGhost.xcworkspace.xcworkspace"
+info Building (using "xcodebuild -workspace AGhost.xcworkspace.xcworkspace -configuration Debug -scheme AGhost.xcworkspace -destination id=185443ED-84DF-4BCF-B397-42F88F1D0672")
+info Run CLI with --verbose flag for more details.

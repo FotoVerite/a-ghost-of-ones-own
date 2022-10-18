@@ -6,7 +6,6 @@ import {StatusBar} from 'react-native';
 import VoiceMail from './Voicemail';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from './Header';
-Icon.loadFont();
 
 export const Phone: FC<{}> = props => {
   const Tab = createBottomTabNavigator();

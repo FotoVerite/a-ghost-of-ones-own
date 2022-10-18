@@ -22,11 +22,9 @@ import Animated, {
 
 import {P} from 'components/StyledText';
 
-import {ITEM_SIZE_RATIO} from '.';
-
 import theme from 'themes';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {AlbumProps, PhotoContext} from './context';
+import {AlbumProps, ITEM_SIZE_RATIO, PhotoContext} from './context';
 import {useNavigation, useNavigationState} from '@react-navigation/native';
 
 export type Props = {

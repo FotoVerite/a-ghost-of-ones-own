@@ -8,7 +8,6 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-Icon.loadFont();
 
 type Props = {height: number; width: number; step: number; stepIn: number};
 
