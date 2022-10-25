@@ -83,6 +83,12 @@ const Desktop: FC<Props> = props => {
               navigation={props.navigation}
             />
             <Application
+              image={photos}
+              title={'Photos'}
+              navigateTo={'PhotosApp'}
+              navigation={props.navigation}
+            />
+            <Application
               image={messenger}
               title={'Messenger'}
               navigateTo={'Messages'}
@@ -92,18 +98,6 @@ const Desktop: FC<Props> = props => {
               image={messenger}
               title={'Discord'}
               navigateTo={'Discord'}
-              navigation={props.navigation}
-            />
-            <Application
-              image={photos}
-              title={'Photos'}
-              navigateTo={'PhotosApp'}
-              navigation={props.navigation}
-            />
-            <Application
-              image={photos}
-              title={'ScratchPad'}
-              navigateTo={'ScratchPad'}
               navigation={props.navigation}
             />
           </Row>

@@ -53,6 +53,17 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
       component: (
         <ApplicationLineItem
           image={notepad}
+          title={'Photos'}
+          navigateTo={'PhotosApp'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Photos',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          image={notepad}
           title={'Discord'}
           navigateTo={'Discord'}
           navigation={navigation}
@@ -98,7 +109,27 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
           navigation={navigation}
         />
       ),
-      name: 'AcB',
+      name: 'Gamepad',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Grindr'}
+          icon={
+            <Icon
+              name="user-o"
+              size={40}
+              style={{
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          }
+          navigateTo={'Grindr'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Grindr',
     },
     {
       component: (

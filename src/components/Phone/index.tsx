@@ -6,6 +6,7 @@ import {StatusBar} from 'react-native';
 import VoiceMail from './Voicemail';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from './Header';
+import GrindrContextProvider from 'components/Grindr/context';
 
 export const Phone: FC<{}> = props => {
   const Tab = createBottomTabNavigator();
@@ -15,7 +16,6 @@ export const Phone: FC<{}> = props => {
       <SafeAreaView style={{flex: 1}}>
         <StatusBar hidden />
         <Header />
-
         <Tab.Navigator
           initialRouteName={'Phone'}
           screenOptions={{headerShown: false}}>

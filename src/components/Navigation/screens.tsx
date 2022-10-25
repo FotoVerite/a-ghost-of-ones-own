@@ -1,6 +1,7 @@
 import {Bank} from 'components/Bank';
 import Desktop from 'components/Desktop';
 import Discord from 'components/Discord';
+import {Grindr} from 'components/Grindr';
 import LiquidSwiper from 'components/LiquidSwiper';
 import Messenger from 'components/Messanger/';
 import NesGamepad from 'components/NesGamepad';
@@ -37,7 +38,7 @@ export const SCREENS = {
   },
   Grindr: {
     title: '',
-    component: Desktop,
+    component: Grindr,
   },
   LiquidSwiper: {
     title: '',

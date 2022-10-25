@@ -92,4 +92,16 @@ export const discordTheme = {
   },
 };
 
+export const GrindrTheme = {
+  colors: {
+    accent: '#7289da',
+    gray60: '#424549',
+    gray50: '#36393e',
+    gray40: '#282b30',
+    gray30: '#1e2124',
+    grindrBlue: '#16BBF4',
+    grinderYellow: '#F9E307',
+  },
+};
+
 export default theme;
