@@ -128,7 +128,7 @@ const Glitch: FC<{
   // );
 
   return (
-    <>
+    <View style={{position: 'absolute', zIndex: 5}}>
       <Animated.View
         style={[{overflow: 'hidden', zIndex: 100}, transformStyle]}>
         <Animated.View style={[{}, innerStyle]}>
@@ -136,7 +136,7 @@ const Glitch: FC<{
         </Animated.View>
       </Animated.View>
       <Element style={{zIndex: 1, position: 'absolute'}} />
-    </>
+    </View>
   );
 };
 

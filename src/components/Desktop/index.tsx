@@ -7,7 +7,7 @@ import Fuse from 'fuse.js';
 import {Layout, Row} from 'components/Grid';
 import {ImageBackground, StatusBar, View} from 'react-native';
 
-import bg from 'assets/images/backgrounds/snow-egg.jpeg';
+import bg from 'assets/images/backgrounds/butterflyBackground.png';
 import {Application} from './Application';
 
 import messenger from './icons/messenger.png';

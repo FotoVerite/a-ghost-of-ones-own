@@ -5,6 +5,7 @@ import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
 import {ExchangeType, MessengerContext} from './context/MessengerContext';
 import Exchange from './Exchange';
 import theme from 'themes';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Conversation: FC = () => {
   const context = useContext(MessengerContext);
@@ -28,6 +29,7 @@ const Conversation: FC = () => {
       key={`exchange-${index}`}
     />
   );
+  const insets = useSafeAreaInsets();
 
   return (
     <Animated.View
@@ -38,9 +40,10 @@ const Conversation: FC = () => {
           top: 0,
           position: 'absolute',
           width: width,
-          flex: 1,
           flexGrow: 1,
           bottom: 0,
+          paddingBottom: insets.bottom + 45,
+          height: height,
         },
         FolderAnimatedProps,
       ]}>

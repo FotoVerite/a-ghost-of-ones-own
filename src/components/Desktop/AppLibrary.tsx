@@ -203,9 +203,10 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
               position: 'absolute',
               width: '100%',
               height: '100%',
+              top: 0 - insets.top,
             }}
             blurType="light"
-            blurAmount={30}
+            blurAmount={5}
             reducedTransparencyFallbackColor="white"
           />
           <View style={{zIndex: 3, flex: 1}}>
@@ -218,6 +219,7 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
             <FlatList
               style={{
                 padding: theme.spacing.p1,
+                marginBottom: insets.bottom + insets.top,
               }}
               data={apps}
               renderItem={renderItem}

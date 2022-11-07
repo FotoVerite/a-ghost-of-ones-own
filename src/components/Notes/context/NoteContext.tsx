@@ -22,6 +22,7 @@ import {mirrors} from '../notes/mirrors';
 import {nsa} from '../notes/nsa';
 import {record_posts} from '../notes/record_posts';
 import {screenTime} from '../notes/screentime';
+import {severance} from '../notes/severance';
 import {swarm} from '../notes/swarm';
 import {theCeiling} from '../notes/theCeiling';
 import {whatScaresMe} from '../notes/whatScaresMe';
@@ -78,7 +79,7 @@ const NoteContextProvider: FC<NoteContextTypeDigest> = props => {
 
   const folder1 = {
     title: 'Personal',
-    notes: [anxiety, nsa, InTheBackOfTheirHead],
+    notes: [anxiety, nsa, InTheBackOfTheirHead, severance],
   };
 
   const folder2 = {

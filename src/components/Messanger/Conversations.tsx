@@ -1,6 +1,7 @@
 import React, {FC, useContext} from 'react';
 import {FlatList, ListRenderItem, View} from 'react-native';
 import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import theme from 'themes';
 import {ConversationType, MessengerContext} from './context/MessengerContext';
@@ -41,7 +42,6 @@ const Conversations: FC = () => {
           borderRadius: theme.BorderRadius.small,
           backgroundColor: 'white',
           paddingHorizontal: theme.spacing.p2,
-          flexGrow: 1,
         }}
         data={context.viewableConversations.state}
         renderItem={renderItem}

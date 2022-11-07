@@ -15,8 +15,8 @@ const DisplayDateTime: FC<Props> = ({datetime}) => {
         fontSize: 10,
         marginBottom: theme.spacing.p1,
       }}>
-      {datetime.year() < 2021 && datetime.format('ddd, MMM DD, YYYY - hh:mm a')}
-      {datetime.year() === 2021 && datetime.format('ddd, MMM DD - hh:mm a')}
+      {datetime.year() < 2022 && datetime.format('ddd, MMM DD, YYYY - hh:mm a')}
+      {datetime.year() === 2022 && datetime.format('ddd, MMM DD - hh:mm a')}
     </P>
   );
 };

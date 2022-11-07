@@ -82,7 +82,7 @@ const Bubble: FC<{
               padding: 4,
               color: 'white',
               margin: 0,
-              textAlign: avatar ? 'left' : 'right',
+              textAlign: avatar ? 'left' : 'left',
               fontSize: 13,
             }}>
             {message.content}

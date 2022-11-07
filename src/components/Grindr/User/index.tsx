@@ -66,7 +66,6 @@ const User: FC = () => {
 
   const updateSharedOnEnd = (translationY: number) => {
     'worklet';
-
     const newNumber = (lastSwipeOffset.value += translationY);
     lastSwipeOffset.value = newNumber;
     if (newNumber > 550) {

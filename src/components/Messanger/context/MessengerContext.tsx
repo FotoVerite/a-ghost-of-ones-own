@@ -18,6 +18,7 @@ import {chineseSpam} from '../exchanges/chineseSpam';
 import {chris} from '../exchanges/chris';
 import {dennis} from '../exchanges/dennis';
 import {fedex} from '../exchanges/fedex';
+import {grace} from '../exchanges/grace';
 import {grindrReset} from '../exchanges/grindrReset';
 import {matthew} from '../exchanges/matthew';
 import {movieNight} from '../exchanges/moveNight';
@@ -90,6 +91,7 @@ const MessengerContextProvider: FC<MessengerContextDigest> = props => {
     chineseSpam,
     alice,
     matthew,
+    grace,
   ];
 
   const [conversation, setConversation] = React.useState<ConversationType>();
