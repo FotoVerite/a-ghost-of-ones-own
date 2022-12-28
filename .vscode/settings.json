@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["desaturated", "panopticon", "Pressable"]
+  "cSpell.words": ["desaturated", "panopticon", "Pressable"],
+  "files.exclude": {
+    "**/vendor": true
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
 }

@@ -21,16 +21,17 @@ import {runOnJS} from 'react-native-reanimated/src/reanimated2/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
-  navigation: StackNavigationProp<screenParams, 'Desktop'>;
-  route: RouteProp<Record<string, object | undefined>, 'Desktop'>;
+  navigation: StackNavigationProp<screenParams, 'OsLoading'>;
+  route: RouteProp<screenParams, 'OsLoading'>;
 };
 
-const OsLoading: FC<Props> = ({navigation}) => {
+const OsLoading: FC<Props> = ({navigation, route}) => {
   const context = useContext(ApplicationContext);
 
   const ANIMATION_DURATION = 15000;
   const whiteIn = useSharedValue(1);
   const progress = useSharedValue(0);
+  const {overrideRoute} = route.params;
 
   const startLoad = () => {
     progress.value = withTiming(
@@ -53,10 +54,10 @@ const OsLoading: FC<Props> = ({navigation}) => {
 
   useDidMountEffect(() => {
     if (context.script.state.length === 0) {
-      AsyncStorage.setItem('openingSeen', 'true');
+      AsyncStorage.setItem('VIEW_INTRO', 'true');
       let resetAction = CommonActions.reset({
         index: 0,
-        routes: [{name: 'Desktop'}],
+        routes: [{name: overrideRoute || 'Desktop'}],
       });
       navigation.dispatch(resetAction);
     }

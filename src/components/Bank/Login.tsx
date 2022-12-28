@@ -1,17 +1,18 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 
 // Library Imports
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
 import {useForm, Controller} from 'react-hook-form';
-import {Dimensions, Pressable, View} from 'react-native';
+import {Dimensions, Image, Pressable, View} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 // Components
 import {Bold, ErrorText, NoteText} from 'components/StyledText';
 
-import theme from 'themes';
+import theme, {RippleReserveTheme} from 'themes';
 import {Row} from 'components/Grid';
 import ResetPressable from './resetPressable';
+import bank from 'components/Desktop/icons/ripple_reserve_icon.png';
 
 type Inputs = {
   username: string;
@@ -26,9 +27,11 @@ const LoginContainer = styled(View)`
   border-radius: ${theme.BorderRadius.normal}px;
   padding: ${theme.spacing.p2}px;
   shadow-opacity: 0.75;
-  shadow-radius: 25px;
-  shadow-color: rgba(209, 209, 209, 0.58);
+  shadow-radius: 5px;
+  shadow-color: rgba(40, 38, 38, 0.879);
   shadow-offset: 0px 0px;
+  border-color: rgba(66, 64, 64, 0.58);
+  border-width: 1px;
 `;
 
 const InputContainer = styled(View)``;
@@ -69,27 +72,36 @@ const Login: FC<{navigation: any}> = ({navigation}) => {
       <View
         style={{
           flexGrow: 1,
-          marginTop: (dimensions.height - divHight) / 4,
+          marginTop: (dimensions.height - divHight) / 2,
         }}
         onLayout={event => {
           var {height} = event.nativeEvent.layout;
           setDivHight(height);
         }}>
-        <View
-          style={{
-            marginTop: theme.spacing.p5,
-            alignItems: 'center',
-          }}></View>
-
         <LoginContainer>
+          <View
+            style={{
+              position: 'absolute',
+              width: 40,
+              height: 40,
+              backgroundColor: 'red',
+              right: '50%',
+              top: -35,
+              borderRadius: 10,
+            }}>
+            <Image
+              source={bank}
+              style={{width: 50, height: 50, borderRadius: 10}}
+            />
+          </View>
           <Bold
             style={{
               textAlign: 'center',
               marginBottom: theme.spacing.p2,
-              color: theme.colors.brand,
+              color: RippleReserveTheme.colors.BankBlue,
             }}
             size="ml">
-            Welcome Back
+            Ripple Reserve
           </Bold>
           <ErrorText>
             {loginErrorMessage === true
@@ -120,7 +132,7 @@ const Login: FC<{navigation: any}> = ({navigation}) => {
                   leftIcon={{
                     type: 'feather',
                     name: 'user',
-                    color: theme.colors.brand,
+                    color: RippleReserveTheme.colors.BankBlue,
                   }}
                   blurOnSubmit={false}
                   returnKeyType="next"
@@ -154,7 +166,7 @@ const Login: FC<{navigation: any}> = ({navigation}) => {
                   leftIcon={{
                     type: 'feather',
                     name: 'lock',
-                    color: theme.colors.brand,
+                    color: RippleReserveTheme.colors.BankBlue,
                   }}
                   leftIconContainerStyle={{marginEnd: theme.spacing.p2}}
                   placeholder="Enter your password"

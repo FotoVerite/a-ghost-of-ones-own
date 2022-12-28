@@ -1,9 +1,12 @@
 import {Bank} from 'components/Bank';
 import Desktop from 'components/Desktop';
 import Discord from 'components/Discord';
+
 import {Grindr} from 'components/Grindr';
+import Hex from 'components/Hex';
 import LiquidSwiper from 'components/LiquidSwiper';
 import Messenger from 'components/Messanger/';
+import Movies from 'components/Movies';
 import NesGamepad from 'components/NesGamepad';
 import Notes from 'components/Notes';
 import Opening from 'components/Opening';
@@ -12,6 +15,7 @@ import Photos from 'components/Photos';
 import AlbumView, {AlbumType} from 'components/Photos/AlbumView';
 import PhotosViewer from 'components/Photos/PhotosViewer';
 import ScratchPad from 'components/ScratchPad';
+import Settings from 'components/Settings';
 import OsLoading from 'OsLoading';
 
 export const SCREENS = {
@@ -22,6 +26,10 @@ export const SCREENS = {
   Desktop: {
     title: '',
     component: Desktop,
+  },
+  Hex: {
+    title: 'HexGame',
+    component: Hex,
   },
 
   Discord: {
@@ -56,6 +64,10 @@ export const SCREENS = {
     title: '',
     component: Messenger,
   },
+  Movies: {
+    title: 'Movies',
+    component: Movies,
+  },
   Notes: {
     title: 'Notes',
     component: Notes,
@@ -63,6 +75,10 @@ export const SCREENS = {
   PhotosApp: {
     title: 'Photos',
     component: Photos,
+  },
+  Settings: {
+    title: 'Settings',
+    component: Settings,
   },
   Scruff: {
     title: '',
@@ -81,6 +97,7 @@ export type screenParams = {
   Bank: undefined;
   Desktop: undefined;
   Discord: undefined;
+  Hex: undefined;
   Gamepad: undefined;
   Grindr: undefined;
   LiquidSwiper: undefined;
@@ -88,12 +105,14 @@ export type screenParams = {
   Messages: {
     id?: number;
   };
+  Movies: undefined;
   Notes: {id?: string};
   Opening: undefined;
-  OsLoading: undefined;
+  OsLoading: {overrideRoute?: string};
   PhotosApp: undefined;
   ScratchPad: undefined;
   Scruff: undefined;
+  Settings: undefined;
 };
 
 export type AppRoutes = keyof typeof SCREENS;

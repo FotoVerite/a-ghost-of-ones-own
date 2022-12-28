@@ -22,7 +22,7 @@ const Navigation: FC<{}> = props => {
   const [hasSeenOpening, setHasSeenOpening] = useState<boolean | undefined>();
 
   useEffect(() => {
-    AsyncStorage.getItem('openingSeen').then(bool => {
+    AsyncStorage.getItem('VIEW_INTRO').then(bool => {
       setHasSeenOpening(bool != null);
     });
   }, []);

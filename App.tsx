@@ -10,6 +10,8 @@
 
 import ApplicationContextProvider, {
   ApplicationContextConsumer,
+  DEFAULT_SETTINGS_OPTIONS,
+  getSetting,
 } from 'contexts/app';
 import React, {useEffect, useState} from 'react';
 import {LogBox, StatusBar, StyleSheet, useColorScheme} from 'react-native';
@@ -27,6 +29,7 @@ import Subtitles from 'components/utility/Subtitle';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -42,36 +45,37 @@ const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isReady, setIsReady] = useState(false);
   const [flags, setFlags] = useState({});
+  const [optionsMap, setOptionsMap] = useState(
+    new Map<string, string | number | boolean>(),
+  );
 
-  const _loadAssetsAsync = async () => {
-    const findAndSetFlags = await AsyncStorage.getItem('ActOneFlages').then(
-      data => {
-        if (false) {
-          setFlags(JSON.parse(data));
-          return;
-        } else {
-          setFlags(actOneFlags);
-          return;
-        }
-      },
-    );
-
-    await Promise.all([findAndSetFlags]).then(() => {
+  const _loadSettings = async () => {
+    const promises = new Array<Promise<Array<string | number | boolean>>>();
+    for (const option in DEFAULT_SETTINGS_OPTIONS) {
+      promises.push(getSetting(option, DEFAULT_SETTINGS_OPTIONS[option].value));
+    }
+    await Promise.all(promises).then(result => {
+      console.log(result);
+      setOptionsMap(new Map(result as any));
       setIsReady(true);
     });
   };
 
   useEffect(() => {
-    _loadAssetsAsync();
+    _loadSettings();
     Icon.loadFont();
     EntypoIcon.loadFont();
     FontAwesome.loadFont();
+    Feather.loadFont();
   }, []);
 
-  if (isReady)
+  if (isReady && optionsMap.size > 0)
     return (
       <GestureHandlerRootView style={{flex: 1}}>
-        <ApplicationContextProvider flags={flags} actTriggers={actOneTriggers}>
+        <ApplicationContextProvider
+          flags={flags}
+          actTriggers={actOneTriggers}
+          settings={optionsMap}>
           <SafeAreaProvider>
             <NotificationContainer />
             <StatusBar

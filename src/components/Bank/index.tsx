@@ -10,9 +10,9 @@ export const Bank: FC<{}> = props => {
 
   return (
     <Stack.Navigator
-      initialRouteName={'End'}
+      initialRouteName={'Login'}
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Login" component={End} options={{}} />
+      <Stack.Screen name="Login" component={Login} options={{}} />
       <Stack.Screen name="Reset" component={Reset} options={{}} />
       <Stack.Screen name="Questions" component={Questions} options={{}} />
       <Stack.Screen

@@ -8,8 +8,6 @@ import {BlurView} from 'rn-id-blurview';
 import Animated, {SlideInRight, SlideOutRight} from 'react-native-reanimated';
 import FuseSearch from 'components/utility/FuseSearch';
 
-import messenger from './icons/messenger.png';
-import notepad from './icons/notepad.jpeg';
 import {screenParams} from 'components/Navigation/screens';
 import {Bold} from 'components/StyledText';
 
@@ -17,6 +15,12 @@ import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PanGestureHandler} from 'react-native-gesture-handler';
+
+import messenger from './icons/messages_icon.png';
+import notepad from './icons/notes_icon.png';
+import settings from './icons/settings_icon.png';
+import bank from './icons/ripple_reserve_icon.png';
+import hex from './icons/hex_icon.png';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -74,17 +78,19 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
     {
       component: (
         <ApplicationLineItem
-          title={'All Citizens Bank'}
-          icon={
-            <Icon
-              name="bank"
-              size={40}
-              style={{
-                alignSelf: 'center',
-                alignItems: 'center',
-              }}
-            />
-          }
+          image={hex}
+          title={'Hex & Spells'}
+          navigateTo={'Hex'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Hex & Spells',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Ripple Reserve'}
+          image={bank}
           navigateTo={'Bank'}
           navigation={navigation}
         />
@@ -154,7 +160,7 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
     {
       component: (
         <ApplicationLineItem
-          title={'Swiper'}
+          title={'Movies'}
           icon={
             <Icon
               name="phone"
@@ -165,11 +171,34 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
               }}
             />
           }
+          navigateTo={'Movies'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Movies',
+    },
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Swiper'}
+          image={messenger}
           navigateTo={'LiquidSwiper'}
           navigation={navigation}
         />
       ),
       name: 'Swiper',
+    },
+
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Settings'}
+          image={settings}
+          navigateTo={'Settings'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Settings',
     },
   ];
   const [apps, setApps] = useState(applications);

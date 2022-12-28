@@ -10,8 +10,8 @@ import {ImageBackground, StatusBar, View} from 'react-native';
 import bg from 'assets/images/backgrounds/butterflyBackground.png';
 import {Application} from './Application';
 
-import messenger from './icons/messenger.png';
-import notepad from './icons/notepad.jpeg';
+import messenger from './icons/messages_icon.png';
+import notepad from './icons/notes_icon.png';
 import photos from './icons/photos.png';
 
 import AppLibrary from './AppLibrary';

@@ -30,7 +30,15 @@ export const Application: FC<Props> = ({
           resizeMethod={'scale'}
           style={{width: 60, height: 60, alignSelf: 'center'}}
         />
-        <P size="s" style={{textAlign: 'center'}}>
+        <P
+          size="s"
+          style={{
+            textAlign: 'center',
+            color: 'white',
+            textShadowColor: 'black',
+            textShadowOffset: {width: 2, height: 2},
+            textShadowRadius: 5,
+          }}>
           {title}
         </P>
       </View>
@@ -51,10 +59,8 @@ export const ApplicationLineItem: FC<Props> = ({
         {image && (
           <Image
             source={image}
-            width={50}
-            height={50}
             resizeMethod={'scale'}
-            style={{width: 50, height: 50}}
+            style={{width: 75, height: 75, borderRadius: 5}}
           />
         )}
         {icon != undefined && (

@@ -30,6 +30,7 @@ export type NotificationTriggerType = TriggerType & {
 export type ApplicationContextTypeDigest = {
   actTriggers: TriggerMap;
   flags: {[index: string]: boolean};
+  settings: Map<string, string | number | boolean>;
 };
 export type ApplicationContextTypeDigested = {
   actTriggers: TriggerMap;
@@ -49,6 +50,10 @@ export type ApplicationContextTypeDigested = {
     state: ScriptType[];
     set: React.Dispatch<React.SetStateAction<ScriptType[]>>;
     setAsFinished: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+  settings: {
+    update: (optionName: string, value: optionValueType) => void;
+    state: Map<string, string | number | boolean>;
   };
   notifications: {
     set: React.Dispatch<
@@ -84,6 +89,43 @@ export type SoundObjetType = {
 //   ],
 // ]);
 
+export type SelectOptionType = {name: string; value: optionValueType};
+type optionType = {
+  value: string | number | boolean;
+  type: optionValueType;
+  options?: Array<SelectOptionType>;
+};
+export const DEFAULT_SETTINGS_OPTIONS: {
+  [index: string]: optionType;
+} = {
+  VIEW_INTRO: {value: false, type: 'checkbox'},
+  LEVEL: {
+    value: 0,
+    type: 'select',
+    options: [
+      {name: 'part 1', value: 1},
+      {name: 'part 2', value: 2},
+    ],
+  },
+  BGM_VOLUME: {value: 50, type: 'range'},
+  SPEECH_VOLUME: {value: 50, type: 'range'},
+};
+
+export type optionValueType = string | number | boolean;
+
+export const getSetting = async (
+  optionName: string,
+  defaultValue: string | number | boolean,
+) => {
+  const option = await AsyncStorage.getItem(optionName);
+  if (option == null) {
+    AsyncStorage.setItem(optionName, JSON.stringify(defaultValue));
+  }
+  return new Promise<Array<string | number | boolean>>((resolve, reject) =>
+    resolve([optionName, JSON.parse(option || JSON.stringify(defaultValue))]),
+  );
+};
+
 function isScript(
   trigger: NotificationTriggerType | TriggerType | ScriptTriggerType,
 ): trigger is ScriptTriggerType {
@@ -95,6 +137,7 @@ function isNotification(
 ): trigger is NotificationTriggerType {
   return (trigger as NotificationTriggerType).type == 'notification';
 }
+
 //defaults for empty app
 export const ApplicationContext =
   React.createContext<ApplicationContextTypeDigested>({});
@@ -116,6 +159,7 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
   const [checkForTriggers, setCheckForTriggers] = useState(0);
   const [triggers, setTriggers] = useState(props.actTriggers);
   const [flags, setFlags] = useState(props.flags);
+  const [settings, setSettings] = useState(props.settings);
 
   useEffect(() => {
     Sound.setCategory('Playback');
@@ -195,6 +239,15 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
     AsyncStorage.setItem('ActOneFlages', JSON.stringify(flags));
   }, [flags]);
 
+  const updateSetting = (optionName: string, value: optionValueType) => {
+    AsyncStorage.setItem(optionName, JSON.stringify(value));
+    setSettings(settings => {
+      const newMap = new Map(settings);
+      newMap.set(optionName, value);
+      return newMap;
+    });
+  };
+
   return (
     <ApplicationContext.Provider
       value={{
@@ -220,6 +273,10 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
           state: subtitles,
           set: setSubtitles,
           setAsFinished: setScriptFinished,
+        },
+        settings: {
+          update: updateSetting,
+          state: settings,
         },
       }}>
       {props.children}
