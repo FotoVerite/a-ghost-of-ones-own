@@ -23,7 +23,7 @@ const Navigation: FC<{}> = props => {
 
   useEffect(() => {
     AsyncStorage.getItem('VIEW_INTRO').then(bool => {
-      setHasSeenOpening(bool != null);
+      setHasSeenOpening(bool === 'true');
     });
   }, []);
 
@@ -35,7 +35,7 @@ const Navigation: FC<{}> = props => {
     return (
       <NavigationContainer theme={DarkTheme}>
         <Stack.Navigator
-          initialRouteName={hasSeenOpening ? 'Desktop' : 'Opening'}
+          initialRouteName={hasSeenOpening ? 'OsLoading' : 'Desktop'}
           screenOptions={{
             headerShown: false,
             cardStyle: {backgroundColor: 'transparent'},

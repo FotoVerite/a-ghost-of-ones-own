@@ -8,7 +8,8 @@ import {
   NotificationProps,
   NotificationTriggerProps,
 } from 'components/Notification';
-import {ScriptTriggerType, ScriptType} from 'components/utility/Subtitle';
+import {ScriptTriggerType} from 'components/utility/SubtitleContainer';
+import {ScriptType} from 'components/utility/SubtitleContainer/context/SubtitleContext';
 
 export type TriggerMap = Map<string, TriggerType>;
 export type TriggerType = {
@@ -29,6 +30,7 @@ export type NotificationTriggerType = TriggerType & {
 
 export type ApplicationContextTypeDigest = {
   actTriggers: TriggerMap;
+  triggers: Map<string, string | number | boolean>;
   flags: {[index: string]: boolean};
   settings: Map<string, string | number | boolean>;
 };
@@ -41,14 +43,9 @@ export type ApplicationContextTypeDigested = {
   flags: {[index: string]: boolean};
 
   startedSession: Moment;
-  subtitles: {
-    state: string[];
-    set: React.Dispatch<React.SetStateAction<string[]>>;
-    setAsFinished: React.Dispatch<React.SetStateAction<boolean>>;
-  };
   script: {
-    state: ScriptType[];
-    set: React.Dispatch<React.SetStateAction<ScriptType[]>>;
+    state: ScriptType | undefined;
+    set: React.Dispatch<React.SetStateAction<ScriptType | undefined>>;
     setAsFinished: React.Dispatch<React.SetStateAction<boolean>>;
   };
   settings: {
@@ -61,6 +58,10 @@ export type ApplicationContextTypeDigested = {
     >;
     state: Map<string, NotificationTriggerProps>;
     add: (attributes: NotificationTriggerProps) => void;
+  };
+  triggers: {
+    update: (optionName: string, value: optionValueType) => void;
+    state: Map<string, string | number | boolean>;
   };
   player?: Sound;
 };
@@ -107,8 +108,17 @@ export const DEFAULT_SETTINGS_OPTIONS: {
       {name: 'part 2', value: 2},
     ],
   },
+  TEXT_SPEED: {value: 50, type: 'range'},
   BGM_VOLUME: {value: 50, type: 'range'},
   SPEECH_VOLUME: {value: 50, type: 'range'},
+};
+
+export const TRIGGERS: {
+  [index: string]: optionType;
+} = {
+  DESKTOP_FIRST_OPEN: {value: false, type: 'checkbox'},
+  HEXES_FIRST_OPEN: {value: false, type: 'checkbox'},
+  NOTES_FIRST_OPEN: {value: false, type: 'checkbox'},
 };
 
 export type optionValueType = string | number | boolean;
@@ -152,12 +162,13 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
     Map<string, NotificationTriggerProps>
   >(new Map());
   const [startOfSession] = useState(moment());
-  const [subtitles, setSubtitles] = useState<string[]>([]);
-  const [script, setScript] = useState<ScriptType[]>([]);
+  const [script, setScript] = useState<ScriptType | undefined>(undefined);
   const [scriptFinished, setScriptFinished] = useState<boolean>(false);
 
   const [checkForTriggers, setCheckForTriggers] = useState(0);
   const [triggers, setTriggers] = useState(props.actTriggers);
+  const [internalTriggers, setInternalTriggers] = useState(props.triggers);
+
   const [flags, setFlags] = useState(props.flags);
   const [settings, setSettings] = useState(props.settings);
 
@@ -248,6 +259,15 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
     });
   };
 
+  const updateTrigger = (optionName: string, value: optionValueType) => {
+    AsyncStorage.setItem(optionName, JSON.stringify(value));
+    setInternalTriggers(settings => {
+      const newMap = new Map(settings);
+      newMap.set(optionName, value);
+      return newMap;
+    });
+  };
+
   return (
     <ApplicationContext.Provider
       value={{
@@ -269,14 +289,13 @@ const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
           set: setScript,
           setAsFinished: setScriptFinished,
         },
-        subtitles: {
-          state: subtitles,
-          set: setSubtitles,
-          setAsFinished: setScriptFinished,
-        },
         settings: {
           update: updateSetting,
           state: settings,
+        },
+        triggers: {
+          update: updateTrigger,
+          state: internalTriggers,
         },
       }}>
       {props.children}

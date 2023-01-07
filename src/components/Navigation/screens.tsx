@@ -5,17 +5,16 @@ import Discord from 'components/Discord';
 import {Grindr} from 'components/Grindr';
 import Hex from 'components/Hex';
 import LiquidSwiper from 'components/LiquidSwiper';
+import LockScreen from 'components/LockScreen';
 import Messenger from 'components/Messanger/';
 import Movies from 'components/Movies';
 import NesGamepad from 'components/NesGamepad';
 import Notes from 'components/Notes';
-import Opening from 'components/Opening';
 import {Phone} from 'components/Phone';
 import Photos from 'components/Photos';
-import AlbumView, {AlbumType} from 'components/Photos/AlbumView';
-import PhotosViewer from 'components/Photos/PhotosViewer';
 import ScratchPad from 'components/ScratchPad';
 import Settings from 'components/Settings';
+import Triggers from 'components/Triggers';
 import OsLoading from 'OsLoading';
 
 export const SCREENS = {
@@ -36,6 +35,10 @@ export const SCREENS = {
     title: '',
     component: Discord,
   },
+  LockScreen: {
+    title: '',
+    component: LockScreen,
+  },
   Phone: {
     title: '',
     component: Phone,
@@ -51,10 +54,6 @@ export const SCREENS = {
   LiquidSwiper: {
     title: '',
     component: LiquidSwiper,
-  },
-  Opening: {
-    title: '',
-    component: Opening,
   },
   OsLoading: {
     title: '',
@@ -88,6 +87,10 @@ export const SCREENS = {
     title: 'Scratch Pad',
     component: ScratchPad,
   },
+  Triggers: {
+    title: 'Triggers',
+    component: Triggers,
+  },
 };
 
 export type screenParams = {
@@ -101,18 +104,19 @@ export type screenParams = {
   Gamepad: undefined;
   Grindr: undefined;
   LiquidSwiper: undefined;
+  LockScreen: undefined;
   Phone: undefined;
   Messages: {
     id?: number;
   };
   Movies: undefined;
   Notes: {id?: string};
-  Opening: undefined;
   OsLoading: {overrideRoute?: string};
   PhotosApp: undefined;
   ScratchPad: undefined;
   Scruff: undefined;
   Settings: undefined;
+  Triggers: undefined;
 };
 
 export type AppRoutes = keyof typeof SCREENS;

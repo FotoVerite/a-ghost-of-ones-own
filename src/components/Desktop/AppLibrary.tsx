@@ -200,6 +200,18 @@ const AppLibrary: FC<Props> = ({navigation, setVisible}) => {
       ),
       name: 'Settings',
     },
+
+    {
+      component: (
+        <ApplicationLineItem
+          title={'Triggers'}
+          image={settings}
+          navigateTo={'Triggers'}
+          navigation={navigation}
+        />
+      ),
+      name: 'Triggers',
+    },
   ];
   const [apps, setApps] = useState(applications);
 

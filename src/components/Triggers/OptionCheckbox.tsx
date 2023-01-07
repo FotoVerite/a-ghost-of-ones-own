@@ -1,4 +1,5 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
+import {View} from 'react-native';
 
 import {ApplicationContext} from 'contexts/app';
 import {CheckBox} from 'react-native-elements';
@@ -13,7 +14,7 @@ const OptionCheckbox: FC<{optionName: string; checked: boolean}> = ({
   const [isChecked, setChecked] = useState(checked);
 
   useEffect(() => {
-    appContext.settings.update(optionName, isChecked);
+    appContext.triggers.update(optionName, isChecked);
   }, [isChecked]);
 
   return (

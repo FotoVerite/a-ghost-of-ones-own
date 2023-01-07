@@ -1,7 +1,7 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {Image, View} from 'react-native';
-import OsLogo from 'assets/images/icons/osLogo.png';
-import loading from 'assets/scripts/loading';
+import OsLogo from 'assets/images/icons/osIcon.png';
+import loading from 'assets/scripts/OsLoading/loading';
 
 import theme from 'themes';
 import Animated, {
@@ -18,7 +18,8 @@ import {CommonActions, RouteProp} from '@react-navigation/native';
 import {screenParams} from 'components/Navigation/screens';
 import {useDidMountEffect} from '../hooks/useDidMountEffect';
 import {runOnJS} from 'react-native-reanimated/src/reanimated2/core';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import opening from 'assets/scripts/OsLoading/opening';
+import GhostIcon from './GhostIcon';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'OsLoading'>;
@@ -27,39 +28,39 @@ type Props = {
 
 const OsLoading: FC<Props> = ({navigation, route}) => {
   const context = useContext(ApplicationContext);
+  const [lastScriptLoaded, setLastScriptLoaded] = useState('');
 
-  const ANIMATION_DURATION = 15000;
+  const ANIMATION_DURATION = 25000;
   const whiteIn = useSharedValue(1);
   const progress = useSharedValue(0);
-  const {overrideRoute} = route.params;
 
-  const startLoad = () => {
-    progress.value = withTiming(
-      10,
-      {
-        duration: ANIMATION_DURATION,
-        easing: Easing.ease,
-      },
-      () => {},
-    );
+  const startLoadAnimation = () => {
+    whiteIn.value = withTiming(0, {duration: 250});
+    progress.value = withTiming(10, {
+      duration: ANIMATION_DURATION,
+      easing: Easing.ease,
+    });
   };
 
   useEffect(() => {
-    whiteIn.value = withTiming(0, {duration: 1500}, () => runOnJS(startLoad)());
-  }, []);
-
-  useEffect(() => {
-    context.script.set(loading);
+    context.script.set(opening);
   }, []);
 
   useDidMountEffect(() => {
-    if (context.script.state.length === 0) {
-      AsyncStorage.setItem('VIEW_INTRO', 'true');
+    if (context.script.state.length === 0 && lastScriptLoaded === 'loading') {
       let resetAction = CommonActions.reset({
         index: 0,
-        routes: [{name: overrideRoute || 'Desktop'}],
+        routes: [{name: route.params?.overrideRoute || 'LockScreen'}],
       });
       navigation.dispatch(resetAction);
+    } else if (context.script.state.length === 0 && lastScriptLoaded === '') {
+      setLastScriptLoaded('loading');
+      startLoadAnimation();
+      context.script.set(loading);
+    } else if (
+      context.script.state.length === 0 &&
+      lastScriptLoaded === 'opening'
+    ) {
     }
   }, [context.script.state]);
 
@@ -116,34 +117,31 @@ const OsLoading: FC<Props> = ({navigation, route}) => {
             position: 'absolute',
             width: '100%',
             height: '100%',
-            backgroundColor: 'white',
             zIndex: 11,
+            backgroundColor: 'black',
+            opacity: 0,
           },
           whiteInStyle,
         ]}
       />
-      <Image
-        source={OsLogo}
-        style={{
-          width: 200,
-          height: 200,
-        }}
-      />
+      <GhostIcon />
+
       <View
         style={{
           borderWidth: 3,
           borderColor: '#cfcbcb',
-          width: '50%',
-          height: 30,
+          width: '70%',
+          height: 20,
           overflow: 'hidden',
           borderRadius: 10,
-          marginTop: theme.spacing.p3,
+          marginTop: theme.spacing.p5,
         }}>
         <Animated.View
           style={[
             {
-              backgroundColor: 'red',
-              height: 24,
+              width: '100%',
+              backgroundColor: '#8A0303',
+              height: '100%',
               borderRadius: 5,
             },
             barStyle,

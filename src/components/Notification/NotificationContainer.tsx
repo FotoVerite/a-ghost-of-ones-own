@@ -15,7 +15,7 @@ const NotificationContainer: FC = () => {
         position: 'absolute',
         height: notificationArray.length * 50,
         width: '80%',
-        zIndex: 5,
+        zIndex: notificationArray.length === 0 ? 0 : 5,
         alignSelf: 'center',
       }}>
       <AnimatePresence>

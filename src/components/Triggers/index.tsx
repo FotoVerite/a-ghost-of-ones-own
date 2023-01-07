@@ -4,48 +4,46 @@ import {Layout} from 'components/Grid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {
-  ApplicationContext,
-  DEFAULT_SETTINGS_OPTIONS,
-  optionValueType,
-} from 'contexts/app';
+import {ApplicationContext, optionValueType, TRIGGERS} from 'contexts/app';
+
+import Header from './Header';
 import OptionCheckbox from './OptionCheckbox';
 import OptionSelect from './OptionSelect';
 import OptionSlider from './OptionSlider';
 import theme from 'themes';
-import Header from './Header';
 
-const Settings: FC = () => {
+const Triggers: FC = () => {
   const insets = useSafeAreaInsets();
   const appContext = useContext(ApplicationContext);
-  const settings = appContext.settings.state;
+  const triggers = appContext.triggers.state;
+  console.log(triggers);
 
   const renderOption: ListRenderItem<{
     name: string;
     value: optionValueType;
   }> = ({item, index}) => {
     const optionName = item.name;
-    const optionType = DEFAULT_SETTINGS_OPTIONS[optionName]?.type;
+    const optionType = TRIGGERS[optionName]?.type;
     if (optionType != null) {
       if (optionType === 'checkbox') {
         return (
           <OptionCheckbox
             optionName={optionName}
-            checked={settings.get(optionName) as boolean}
+            checked={triggers.get(optionName) as boolean}
           />
         );
       } else if (optionType === 'select') {
         return (
           <OptionSelect
             optionName={optionName}
-            optionValue={settings.get(optionName) as string}
+            optionValue={triggers.get(optionName) as string}
           />
         );
       } else if (optionType === 'range') {
         return (
           <OptionSlider
             optionName={optionName}
-            optionValue={settings.get(optionName) as number}
+            optionValue={triggers.get(optionName) as number}
           />
         );
       } else {
@@ -78,7 +76,7 @@ const Settings: FC = () => {
           }}
           initialNumToRender={25}
           // onViewableItemsChanged={onViewRef.current}
-          data={Array.from(settings, ([name, value]) => ({name, value}))}
+          data={Array.from(triggers, ([name, value]) => ({name, value}))}
           renderItem={renderOption}
           keyExtractor={(item: any, index) => index + ''}
           ItemSeparatorComponent={props => {
@@ -98,4 +96,4 @@ const Settings: FC = () => {
   );
 };
 
-export default Settings;
+export default Triggers;

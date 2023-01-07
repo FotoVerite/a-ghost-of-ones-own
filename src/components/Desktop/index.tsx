@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {screenParams} from 'components/Navigation/screens';
 import {RouteProp} from '@react-navigation/core';
@@ -19,6 +19,8 @@ import AppLibrary from './AppLibrary';
 import theme from 'themes';
 import {useFocusEffect} from '@react-navigation/native';
 import {PanGestureHandler} from 'react-native-gesture-handler';
+import {ApplicationContext} from 'contexts/app';
+import ZaraNotification from 'assets/scripts/Desktop/Zara';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -27,6 +29,7 @@ type Props = {
 
 const Desktop: FC<Props> = props => {
   const [appLibrary, setAppLibrary] = useState(false);
+  const context = useContext(ApplicationContext);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -50,6 +53,19 @@ const Desktop: FC<Props> = props => {
     keys: ['name'],
   };
   const fuse = new Fuse([], options);
+
+  useEffect(() => {
+    if (context.triggers.state.get('DESKTOP_FIRST_OPEN') === false) {
+      context.script.set(ZaraNotification);
+      context.notifications.add({
+        iconName: 'reminder',
+        title: 'Apologize',
+        body: 'Text Zara and make this right!',
+        key: 'apologize',
+      });
+      context.triggers.update('DESKTOP_FIRST_OPEN', true);
+    }
+  }, []);
 
   return (
     <>
