@@ -44,23 +44,22 @@ const OsLoading: FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     context.script.set(opening);
+    setLastScriptLoaded('opening');
   }, []);
 
   useDidMountEffect(() => {
-    if (context.script.state.length === 0 && lastScriptLoaded === 'loading') {
-      let resetAction = CommonActions.reset({
-        index: 0,
-        routes: [{name: route.params?.overrideRoute || 'LockScreen'}],
-      });
-      navigation.dispatch(resetAction);
-    } else if (context.script.state.length === 0 && lastScriptLoaded === '') {
-      setLastScriptLoaded('loading');
-      startLoadAnimation();
-      context.script.set(loading);
-    } else if (
-      context.script.state.length === 0 &&
-      lastScriptLoaded === 'opening'
-    ) {
+    if (context.script.state == null) {
+      if (lastScriptLoaded === 'loading') {
+        let resetAction = CommonActions.reset({
+          index: 0,
+          routes: [{name: route.params?.overrideRoute || 'LockScreen'}],
+        });
+        navigation.dispatch(resetAction);
+      } else if (lastScriptLoaded === 'opening') {
+        setLastScriptLoaded('loading');
+        startLoadAnimation();
+        context.script.set(loading);
+      }
     }
   }, [context.script.state]);
 

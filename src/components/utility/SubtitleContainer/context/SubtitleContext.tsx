@@ -40,7 +40,14 @@ export type SubtitleContextTypeDigested = {
   };
   script: ScriptType | undefined;
   subtitles: SubtitleType[] | undefined;
-  speed: number;
+  speed: {
+    set: React.Dispatch<React.SetStateAction<number>>;
+    state: number;
+  };
+  skip: {
+    set: React.Dispatch<React.SetStateAction<boolean>>;
+    state: boolean;
+  };
 };
 //defaults for empty app
 export const SubtitleContext = React.createContext<SubtitleContextTypeDigested>(
@@ -58,6 +65,7 @@ const SubtitleContextProvider: FC<SubtitleContextTypeDigest> = props => {
   const blockLength =
     subtitles == null ? 0 : subtitles[currentBlockIndex]?.text.length - 1;
   const [speed, setSpeed] = useState(50);
+  const [skip, setSkip] = useState(false);
 
   const currentLineVisible = useSharedValue(1);
 
@@ -67,6 +75,7 @@ const SubtitleContextProvider: FC<SubtitleContextTypeDigest> = props => {
       setCurrentBlockIndex(0);
       setCurrentLineIndex(0);
       setCurrentLineFinished(false);
+      setSkip(false);
     }
   }, [subtitles]);
 
@@ -75,11 +84,12 @@ const SubtitleContextProvider: FC<SubtitleContextTypeDigest> = props => {
       return;
     }
     if (subtitles && subtitles.length - 1 === currentBlockIndex) {
-      context.script.set(undefined);
+      setSkip(false);
       setCurrentBlockFinished(false);
       setCurrentBlockIndex(0);
       setCurrentLineIndex(0);
       setCurrentLineFinished(false);
+      context.script.set(undefined);
     } else {
       setCurrentBlockIndex(c => (c += 1));
       setCurrentBlockFinished(false);
@@ -131,7 +141,14 @@ const SubtitleContextProvider: FC<SubtitleContextTypeDigest> = props => {
         },
         script: script,
         subtitles: subtitles,
-        speed: speed,
+        speed: {
+          set: setSpeed,
+          state: speed,
+        },
+        skip: {
+          set: setSkip,
+          state: skip,
+        },
       }}>
       {props.children}
     </SubtitleContext.Provider>

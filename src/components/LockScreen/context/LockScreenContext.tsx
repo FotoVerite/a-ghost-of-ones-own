@@ -79,17 +79,24 @@ const LockScreenContextProvider: FC<LockScreenContextTypeDigest> = props => {
         );
       } else if (tries > 2 && code.join('') === '232323') {
         appContext.script.set(Obvious);
+        incorrect();
       } else if (tries > 2 && code.join('') !== '232323') {
         appContext.script.set(WrongSSN);
+        incorrect();
       } else {
-        shake.value = withTiming(1, {duration: 350}, () => {
-          shake.value = withTiming(0, {duration: 250}, () => {
-            runOnJS(setCode)(new Array<string>());
-            runOnJS(setTries)(tries + 1);
-          });
-        });
+        incorrect();
       }
   }, [code]);
+
+  const incorrect = () => {
+    'worklet';
+    shake.value = withTiming(1, {duration: 350}, () => {
+      shake.value = withTiming(0, {duration: 250}, () => {
+        runOnJS(setCode)(new Array<string>());
+        runOnJS(setTries)(tries + 1);
+      });
+    });
+  };
 
   return (
     <LockScreenContext.Provider

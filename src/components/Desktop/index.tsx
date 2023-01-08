@@ -17,10 +17,12 @@ import photos from './icons/photos.png';
 import AppLibrary from './AppLibrary';
 
 import theme from 'themes';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import {ApplicationContext} from 'contexts/app';
 import ZaraNotification from 'assets/scripts/Desktop/Zara';
+import WhereAreTheApps from 'assets/scripts/Desktop/WhereAreTheApps';
+import moment from 'moment';
 
 type Props = {
   navigation: StackNavigationProp<screenParams, 'Desktop'>;
@@ -29,7 +31,11 @@ type Props = {
 
 const Desktop: FC<Props> = props => {
   const [appLibrary, setAppLibrary] = useState(false);
+  const [desktopStarted, setDesktopStart] = useState(moment());
+  const [timeNow, setTimeNow] = useState(moment());
+
   const context = useContext(ApplicationContext);
+  const isFocused = useIsFocused();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -67,6 +73,22 @@ const Desktop: FC<Props> = props => {
     }
   }, []);
 
+  useEffect(() => {
+    if (
+      context.triggers.state.get('APP_LIBRARY_NOT_SEEN') === false &&
+      timeNow.diff(desktopStarted, 'seconds') > 45
+    ) {
+      if (useIsFocused()) {
+        context.script.set(WhereAreTheApps);
+        context.triggers.update('APP_LIBRARY_NOT_SEEN', true);
+      }
+    } else if (context.triggers.state.get('APP_LIBRARY_NOT_SEEN') === false) {
+      setTimeout(() => {
+        setTimeNow(moment());
+      }, 5000);
+    }
+  }, [timeNow]);
+
   return (
     <>
       <ImageBackground source={bg} resizeMode="cover" style={{flex: 1}}>
@@ -74,6 +96,7 @@ const Desktop: FC<Props> = props => {
           <PanGestureHandler
             activeOffsetX={[-50, 50]}
             onGestureEvent={e => {
+              context.triggers.update('APP_LIBRARY_NOT_SEEN', true);
               setAppLibrary(e.nativeEvent.translationX < 0);
             }}>
             <View

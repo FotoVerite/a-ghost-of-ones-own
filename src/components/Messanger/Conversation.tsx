@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {Dimensions, FlatList, ListRenderItem, View} from 'react-native';
 
 import Animated, {interpolate, useAnimatedProps} from 'react-native-reanimated';
@@ -6,8 +6,12 @@ import {ExchangeType, MessengerContext} from './context/MessengerContext';
 import Exchange from './Exchange';
 import theme from 'themes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ApplicationContext} from 'contexts/app';
+import ZaraOrZola from 'assets/scripts/Desktop/WhereAreTheApps';
 
 const Conversation: FC = () => {
+  const appContext = useContext(ApplicationContext);
+
   const context = useContext(MessengerContext);
   const {sharedValues, conversation} = context;
   const {width, height} = Dimensions.get('window');
@@ -20,6 +24,17 @@ const Conversation: FC = () => {
       ),
     };
   });
+
+  useEffect(() => {
+    if (
+      appContext.triggers.state.get('ZOLA_SEEN') === false &&
+      conversation.state?.name == 'zola'
+    ) {
+      appContext.script.set(ZaraOrZola);
+
+      appContext.triggers.update('ZOLA_SEEN', true);
+    }
+  }, [conversation]);
 
   const renderConversation: ListRenderItem<ExchangeType> = ({item, index}) => (
     <Exchange

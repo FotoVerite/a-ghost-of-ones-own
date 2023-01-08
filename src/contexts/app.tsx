@@ -119,6 +119,9 @@ export const TRIGGERS: {
   DESKTOP_FIRST_OPEN: {value: false, type: 'checkbox'},
   HEXES_FIRST_OPEN: {value: false, type: 'checkbox'},
   NOTES_FIRST_OPEN: {value: false, type: 'checkbox'},
+  APP_LIBRARY_NOT_SEEN: {value: false, type: 'checkbox'},
+  MESSENGER_FIRST_OPEN: {value: false, type: 'checkbox'},
+  ZOLA_SEEN: {value: false, type: 'checkbox'},
 };
 
 export type optionValueType = string | number | boolean;

@@ -53,7 +53,7 @@ const LockScreen: FC = () => {
               justifyContent: 'space-around',
               marginTop: 'auto',
               alignItems: 'flex-end',
-              paddingBottom: insets.bottom,
+              paddingBottom: insets.bottom + 12,
             }}>
             <TouchableWithoutFeedback>
               <P style={{color: 'white'}}>Emergency</P>

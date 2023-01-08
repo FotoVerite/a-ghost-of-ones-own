@@ -20,7 +20,7 @@ const KeypadButton: FC<Props> = ({abcText, dialNumber}) => {
       unpressedColor={'#61616179'}
       pressedColor={'#c1c1c1cf'}
       onPressIn={() => {
-        if (appContext.script.state.length === 0) {
+        if (appContext.script.state == null) {
           context.code.set(n => n.concat(dialNumber));
         }
       }}

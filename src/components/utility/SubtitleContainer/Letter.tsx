@@ -33,12 +33,12 @@ const Letter: FC<{
     (hasSpecialAnimations.get('grow')?.length === 0 ||
       hasSpecialAnimations.get('grow')?.includes(wordIndex));
 
-  const lineFinished = () => {
+  const lineFinished = (duration: number = 200) => {
     'worklet';
     if (charCount - 1 === indexInLine) {
       subtitleContext.currentLineVisible.value = withDelay(
         500,
-        withTiming(0, {duration: 200, easing: Easing.cubic}, () =>
+        withTiming(0, {duration: duration, easing: Easing.cubic}, () =>
           runOnJS(subtitleContext.currentLineFinished.set)(true),
         ),
       );
@@ -46,12 +46,21 @@ const Letter: FC<{
   };
 
   useEffect(() => {
-    opacityState.value = withDelay(
-      delay + 30 * indexInLine,
-      withTiming(1, {duration: 500, easing: Easing.elastic(1)}, finished => {
-        if (finished) lineFinished();
-      }),
-    );
+    if (subtitleContext.skip.state) {
+      opacityState.value = withDelay(
+        1,
+        withTiming(1, {duration: 1, easing: Easing.elastic(1)}, finished => {
+          if (finished) lineFinished(1);
+        }),
+      );
+    } else {
+      opacityState.value = withDelay(
+        delay + 30 * indexInLine,
+        withTiming(1, {duration: 500, easing: Easing.elastic(1)}, finished => {
+          if (finished) lineFinished();
+        }),
+      );
+    }
     return () => {};
   }, []);
 
